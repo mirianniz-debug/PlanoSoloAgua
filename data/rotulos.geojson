@@ -1,0 +1,16 @@
+{
+"type": "FeatureCollection",
+"name": "rotulos",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"xy_coordinate_resolution": 1e-05,
+"features": [
+{ "type": "Feature", "properties": { "nome": "Fazenda Maripá", "ha_total": 75.41, "ha_municipio": 75.41 }, "geometry": { "type": "Point", "coordinates": [ -46.975, -22.73527 ] } },
+{ "type": "Feature", "properties": { "nome": "Fazenda São João II", "ha_total": 28.67, "ha_municipio": 13.68 }, "geometry": { "type": "Point", "coordinates": [ -46.99088, -22.74103 ] } },
+{ "type": "Feature", "properties": { "nome": "Fazenda São João I", "ha_total": 17.43, "ha_municipio": 17.2 }, "geometry": { "type": "Point", "coordinates": [ -47.0138, -22.73257 ] } },
+{ "type": "Feature", "properties": { "nome": "Fazenda Nossa Senhora de Lourdes", "ha_total": 13.07, "ha_municipio": 13.07 }, "geometry": { "type": "Point", "coordinates": [ -47.05354, -22.69589 ] } },
+{ "type": "Feature", "properties": { "nome": "Fazenda Macatuba", "ha_total": 8.76, "ha_municipio": 8.76 }, "geometry": { "type": "Point", "coordinates": [ -47.03469, -22.69981 ] } },
+{ "type": "Feature", "properties": { "nome": "Fazenda Santa Júlia", "ha_total": 5.7, "ha_municipio": 0.77 }, "geometry": { "type": "Point", "coordinates": [ -46.96045, -22.7351 ] } },
+{ "type": "Feature", "properties": { "nome": "Fazenda Bela Vista", "ha_total": 1.82, "ha_municipio": 1.82 }, "geometry": { "type": "Point", "coordinates": [ -47.0465, -22.69159 ] } },
+{ "type": "Feature", "properties": { "nome": "Sítio Vargem das Pedras", "ha_total": 0.93, "ha_municipio": 0.93 }, "geometry": { "type": "Point", "coordinates": [ -47.02972, -22.66576 ] } }
+]
+}

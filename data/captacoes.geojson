@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "captacoes",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"xy_coordinate_resolution": 1e-05,
+"features": [
+{ "type": "Feature", "properties": { "rio": "Rio Jaguari", "finalidade": "Abastecimento Público (SP Águas)" }, "geometry": { "type": "Point", "coordinates": [ -46.9705, -22.70969 ] } },
+{ "type": "Feature", "properties": { "rio": "Rio Camanducaia", "finalidade": "Abastecimento Público (SP Águas)" }, "geometry": { "type": "Point", "coordinates": [ -46.96958, -22.67531 ] } }
+]
+}
