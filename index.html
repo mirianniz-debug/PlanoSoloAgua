@@ -276,7 +276,7 @@
           <tr class="tot"><td>Total nas APPs</td><td>0,92</td><td>1,94</td><td>1,85</td></tr>
         </table>
         <div class="src">Tabela 5.2. Descontados a floresta existente (Inventário Florestal 2020), o reflorestamento já feito e as áreas urbanizadas. As nascentes (0,08 / 0,21 / 0,17) já estão dentro dos afluentes.</div>
-        <div class="note"><b>A montante da captação:</b> o Plano calcula também o terreno sem floresta dessa zona (2,05 km² no Jaguari e 3,05 km² no Camanducaia). Esse número é um <b>teto</b>: inclui lavouras, pastos e estradas e <b>não será todo plantado</b>. Por isso ele não aparece como área a recompor no mapa. Está no modo técnico, como "potencial".</div>
+        <div class="note"><b>A montante da captação:</b> a zona a montante é um <b>critério de prioridade</b>, não uma área a recompor. A recomposição acontece nas <b>APPs</b>, onde se espera que exista floresta, e não em lavouras e pastos. Só cerca de 0,35 km² das APPs a recompor estão dentro dessa zona; elas são executadas primeiro.</div>
 
         <h3>O que já foi feito</h3>
         <div class="tl">
@@ -303,9 +303,19 @@
           <details><summary>Mapa de uso do solo de 2026</summary><div class="in">
             <p class="txt">Classificação supervisionada (Random Forest, 150 árvores de decisão) da imagem CBERS-4A de maio de 2026, fusionada para 2 m. Validação com 175 pontos: exatidão de 90,9% (Kappa 0,89).</p>
           </div></details>
-          <details><summary>Por que a montante da captação não é "tudo a recompor"</summary><div class="in">
-            <p class="txt">A zona a montante tem 8,1 km² (3,5 no Jaguari e 4,6 no Camanducaia). Os 5,1 km² de "potencial" são todo o terreno dessa zona sem floresta, e só 0,28 km² deles coincidem com APP sem floresta. Cerca de 0,24 km² coincidem com as áreas de terraceamento (a mesma terra não pode receber as duas ações). Dos 5,1 km², 41% estão em sub-bacias de vulnerabilidade muito alta, 22% em alta e 37% em média, baixa ou muito baixa.</p>
-            <p class="txt">Por isso, a montante da captação o Plano usa a posição como critério de <b>prioridade</b> (executar primeiro), e a meta real de plantio deve ser definida por propriedade.</p>
+          <details><summary>A montante da captação: prioridade, não área a recompor</summary><div class="in">
+            <p class="txt">A zona a montante tem 8,1 km² (3,5 no Jaguari e 4,6 no Camanducaia). Só as APPs dessa zona são áreas a recompor (cerca de 0,35 km²). O restante (lavouras, pastos, estradas, florestas) não entra no cálculo. Estar a montante serve para decidir <b>quais APPs são executadas primeiro</b>.</p>
+          </div></details>
+          <details><summary>O que é contado como área a recompor (4,70 km²)</summary><div class="in">
+            <p class="txt">Somente APPs: 50 m ao longo dos rios principais, 30 m ao longo dos afluentes, raio de 50 m das nascentes e faixa ao redor das massas d'água, nas zonas rural e de expansão urbana, descontadas a floresta (Inventário 2020), o reflorestamento do Programa e as áreas urbanizadas e de água. Não entram: zona urbana, lavouras e pastos fora de APP e a área a montante fora de APP.</p>
+            <table class="t"><tr><th>Uso em 2026 (km²)</th><th>Rio princ.</th><th>Afluentes</th><th>Massas</th><th>Nasc.</th><th>Total</th></tr>
+              <tr><td>Agricultura</td><td>0,33</td><td>0,53</td><td>0,05</td><td>0,12</td><td>1,03</td></tr>
+              <tr><td>Solo exposto ou agric.</td><td>0,08</td><td>0,11</td><td>0,02</td><td>0,06</td><td>0,27</td></tr>
+              <tr><td>Pastagem</td><td>0,09</td><td>0,51</td><td>0,05</td><td>0,16</td><td>0,81</td></tr>
+              <tr class="tot"><td>Sem floresta em 2026</td><td>0,50</td><td>1,15</td><td>0,12</td><td>0,34</td><td>2,11</td></tr>
+              <tr><td>Floresta no mapa de 2026</td><td>0,92</td><td>1,38</td><td>0,15</td><td>0,13</td><td>2,58</td></tr>
+            </table>
+            <p class="txt">Os 2,58 km² que o mapa de 2026 mostra como floresta não constam no Inventário Florestal 2020, adotado como critério conservador. Devem ser <b>verificados em campo</b> antes do plantio: o valor de 4,70 km² é o máximo a recompor. Plano, Tabela 5.5.</p>
           </div></details>
           <details><summary>Sub-bacias de contribuição</summary><div class="in">
             <p class="txt">As 354 áreas de contribuição são as sub-bacias da Base Hidrográfica Ottocodificada da ANA (2015), usadas como unidade de priorização. A vulnerabilidade de cada uma é a média dos pixels do Mapa 5; as classes são quintis.</p>
@@ -317,9 +327,8 @@
             <tr><td>Rio principal</td><td>35.000</td><td>111.666</td><td>93.333</td></tr>
             <tr><td>Afluentes e nascentes</td><td>118.333</td><td>211.666</td><td>215.000</td></tr>
             <tr class="tot"><td>Total nas APPs</td><td>153.333</td><td>323.332</td><td>308.333</td></tr>
-            <tr><td><i>Potencial a montante (teto, não é meta)</i></td><td>–</td><td><i>341.666</i></td><td><i>508.333</i></td></tr>
           </table>
-          <div class="src">Espaçamento de 3 m × 2 m. Nas APPs: 784.998 mudas. O potencial a montante soma mais 849.999 mudas se toda a área sem floresta fosse plantada, o que não é a meta.</div>
+          <div class="src">Espaçamento de 3 m × 2 m. Total de 784.998 mudas nas APPs (Tabela 5.3).</div>
 
           <h3>Dados e mapas para baixar <span class="badge-tech">TÉCNICO</span></h3>
           <a class="btn" href="downloads/Mapa6_Prioridades_Recomposicao_Florestal.pdf" target="_blank">📄 Mapa 6 (PDF)</a>
@@ -467,11 +476,6 @@ const DEFS = [
   style:()=>({color:'#0d3b1f', weight:1.2, fillOpacity:.8, fillColor:'#2fa05a'}),
   popup:f=>{ const p=f.properties; return `<h4>${esc(p.local)}</h4>${pp('Área mapeada (propriedade)', fmt(p.ha_total,1)+' ha')}${pp('Bacia', esc(p.sub_bacia))}`; },
   legend:[['#2fa05a','Reflorestamento já realizado']]},
- {id:'potencial', tabs:['acoes'], tech:true, name:'Potencial a montante da captação (teto máximo)', fs:'todo o terreno sem floresta · NÃO será todo plantado', color:'#b4441f', url:'data/a_recompor.geojson', pane:'recompor',
-  filter:f=>f.properties.classe==='A montante de captação' && f.properties.area_km2>0.1,
-  style:()=>({color:'#b4441f', weight:.8, dashArray:'3 3', fillOpacity:.16, fillColor:'#b4441f'}),
-  popup:f=>`<h4>Potencial a montante · ${esc(f.properties.sub_bacia)}</h4>${pp('Área', fmt(f.properties.area_km2,2)+' km²')}<p style="margin:6px 0 0;font-size:11.5px">É o teto: todo o terreno sem floresta da zona a montante (inclui lavouras, pastos e estradas). A área efetivamente recomposta será definida por propriedade.</p>`,
-  legend:[['#e9b9a5','Potencial máximo a montante (não é meta)']]},
  {id:'floresta', tabs:['acoes'], tech:true, name:'Floresta existente (Inventário Florestal 2020)', fs:'usada no cálculo da área a recompor', color:'#1f7a44', url:'data/floresta.geojson', pane:'app',
   style:()=>({stroke:false, fillOpacity:.4, fillColor:'#1f7a44', interactive:false}), legend:[['#1f7a44','Floresta (Inventário 2020)']]}
 ];
