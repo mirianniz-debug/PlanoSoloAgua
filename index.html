@@ -120,9 +120,11 @@
   #basemaps button.on{background:var(--forest);color:#fff;}
   #legend{position:absolute;left:12px;bottom:34px;z-index:800;max-width:260px;max-height:46vh;overflow:auto;background:rgba(251,252,248,.96);border:1px solid var(--line-strong);border-radius:10px;padding:9px 11px;box-shadow:0 2px 10px rgba(0,0,0,.18);font:400 11.5px/1.35 var(--font-body);}
   #legend.min .lg-body{display:none;}
+  body.tab-acoes #legend{display:none;}
   #legend h4{margin:0;font:600 12px var(--font-body);display:flex;justify-content:space-between;cursor:pointer;}
   #legend .lg-t{font:600 11px var(--font-body);margin:8px 0 3px;color:var(--ink);}
   #legend .li{display:flex;align-items:center;gap:7px;margin:2px 0;color:var(--ink-soft);}
+  .rp{display:inline-flex;flex:0 0 auto;} .rp i{display:block;width:13px;height:12px;border:1px solid rgba(0,0,0,.25);margin-right:-1px;}
   #legend .sw{width:14px;height:11px;border-radius:2px;flex:0 0 auto;border:1px solid rgba(0,0,0,.25);}
   #legend .sw.c{border-radius:50%;width:11px;height:11px;}
   #north{position:absolute;right:14px;top:96px;z-index:800;width:34px;text-align:center;font:700 11px var(--font-display);color:var(--ink);background:rgba(251,252,248,.92);border:1px solid var(--line-strong);border-radius:8px;padding:3px 0 2px;}
@@ -189,7 +191,8 @@
         </div>
         <div class="note blue"><b>Camanducaia:</b> a captação de água do Rio Camanducaia ainda <b>não está em operação</b>. Por isso, as ações mais urgentes se concentram no Rio Jaguari.</div>
 
-        <p class="txt">No mapa você vê os <b>rios principais</b> (traço azul grosso, com o nome), os córregos e os <b>pontos de captação</b>. As cores mostram a <b>vulnerabilidade à erosão</b> de cada <b>sub-bacia de contribuição</b> (pedaço do terreno cuja água escoa para um mesmo ponto do rio): quanto mais quente a cor, maior o risco de a terra ser levada pela chuva.</p>
+        <p class="txt">No mapa você vê os <b>rios principais</b> (traço azul grosso, com o nome), os córregos e os <b>pontos de captação</b>. As cores mostram a <b>vulnerabilidade à erosão</b> de cada <b>sub-bacia de contribuição</b> (pedaço do terreno cuja água escoa para um mesmo ponto do rio). Cada bacia tem a sua cor: <b style="color:#c62828">Atibaia em vermelho</b>, <b style="color:#1565c0">Jaguari em azul</b> e <b style="color:#2e7d32">Camanducaia em verde</b>. Quanto <b>mais escuro</b> o tom, maior o risco de a terra ser levada pela chuva.</p>
+        <div id="rampasPanel"></div>
 
         <h3>Camadas</h3>
         <div id="layers-mun"></div>
@@ -391,6 +394,14 @@ const COR_VUL = {'Muito Baixa':'#1a9850','Baixa':'#91cf60','Média':'#fee08b','A
 /* nascentes: escala em roxo, para não se confundir com o verde/laranja das APPs nem com o vermelho da vulnerabilidade das sub-bacias */
 const COR_NAS = {'Muito Baixa':'#d9ccf2','Baixa':'#b9a3e3','Média':'#9575cd','Alta':'#6a3fb5','Área Urbanizada e Construções':'#9aa0a6'};
 const COR_PRIOR = '#2a0f6b';
+/* vulnerabilidade das sub-bacias de contribuição: uma cor por bacia, do branco (muito baixa) ao tom escuro (muito alta) */
+const RAMPA = {
+  'Atibaia':    ['#fff1ee','#fcbba1','#fb6a4a','#cb181d','#67000d'],
+  'Jaguari':    ['#f2f8ff','#c6dbef','#6baed6','#2171b5','#08306b'],
+  'Camanducaia':['#f3fbf1','#c7e9c0','#74c476','#238b45','#00441b']};
+const IDX_VUL = {'Muito baixa':0,'Baixa':1,'Média':2,'Alta':3,'Muito alta':4};
+const COR_BACIA = {'Atibaia':'#c62828','Jaguari':'#1565c0','Camanducaia':'#2e7d32'};
+const corVul = p => (RAMPA[p.sub_bacia] && p.vulnerabilidade_classe in IDX_VUL) ? RAMPA[p.sub_bacia][IDX_VUL[p.vulnerabilidade_classe]] : '#bdbdbd';
 const COR_VULC = {'Muito baixa':'#1a9850','Baixa':'#91cf60','Média':'#fee08b','Alta':'#fc8d59','Muito alta':'#d73027'};
 const COR_REC = {'Rio principal':'#1d6fb8','Afluentes':'#2aa6a6',"Massas d'água":'#7fb4e0','Nascentes':'#7b3fa0'};
 const COR_APP_COM = '#2e7d32', COR_APP_SEM = '#f08c00';
@@ -402,15 +413,15 @@ const TODAS = ['mun','nasc','acoes'];
 const DEFS = [
  {id:'limite', tabs:['*'], name:'Limite municipal', fs:'IBGE, 2025', color:'#16232e', onIn:['*'], always:true, hideRow:true, url:'data/limite.geojson', pane:'bacias',
   style:()=>({color:'#16232e', weight:2.5, fill:false, interactive:false}), legend:[['#16232e','Limite municipal','l']]},
- {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Atibaia · Jaguari · Camanducaia', color:'#d9731f', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
-  style:f=>({color:{'Atibaia':'#2f7fc1','Jaguari':'#d9731f','Camanducaia':'#2f9a45'}[f.properties.nome]||'#555', weight:3.2, fillOpacity:0, opacity:.95}),
+ {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Atibaia (vermelho) · Jaguari (azul) · Camanducaia (verde)', color:'#1565c0', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
+  style:f=>({color:COR_BACIA[f.properties.nome]||'#555', weight:3.2, fillOpacity:0, opacity:.95}),
   popup:f=>`<h4>Bacia do Rio ${esc(f.properties.nome)}</h4>${pp('Área no município', fmt(f.properties.area_km2,1)+' km²')}${pp('Nascentes (ANA)', f.properties.n_nascentes)}`,
-  legend:[['#2f7fc1','Bacia do Atibaia','l'],['#d9731f','Bacia do Jaguari','l'],['#2f9a45','Bacia do Camanducaia','l']]},
+  legend:[[COR_BACIA.Atibaia,'Limite da bacia do Atibaia','l'],[COR_BACIA.Jaguari,'Limite da bacia do Jaguari','l'],[COR_BACIA.Camanducaia,'Limite da bacia do Camanducaia','l']]},
  {id:'contrib', tabs:['mun'], name:'Áreas vulneráveis: sub-bacias de contribuição', fs:'vulnerabilidade média à erosão (Mapa 5) · 354 áreas', color:'#fc8d59', onIn:['mun'], url:'data/contribuicao.geojson', pane:'contrib',
-  style:f=>({color:'#fff', weight:.6, fillOpacity:.6, fillColor:COR_VULC[f.properties.vulnerabilidade_classe]||'#bdbdbd'}),
+  style:f=>({color:'#7a7a7a', weight:.5, fillOpacity:.85, fillColor:corVul(f.properties)}),
   popup:f=>{ const p=f.properties; return `<h4>Sub-bacia de contribuição</h4>${pp('Bacia', esc(p.sub_bacia)+' · prioridade '+esc(p.prioridade_bacia))}${pp('Vulnerabilidade', esc(p.vulnerabilidade_classe||'Urbanizada'))}${p.ordem_na_bacia?pp('Ordem na bacia', p.ordem_na_bacia+'ª'):''}${p.a_montante_de?pp('A montante de', esc(p.a_montante_de)):''}${pp('Área', fmt(p.area_km2,2)+' km²')}`; },
-  legendTitle:'Vulnerabilidade à erosão (sub-bacias)',
-  legend:[['#1a9850','Vulnerabilidade muito baixa'],['#91cf60','Baixa'],['#fee08b','Média'],['#fc8d59','Alta'],['#d73027','Muito alta'],['#bdbdbd','Urbanizada']]},
+  legendTitle:'Vulnerabilidade à erosão (do claro ao escuro: muito baixa → muito alta)',
+  legend:[[RAMPA.Atibaia,'Bacia do Atibaia','r'],[RAMPA.Jaguari,'Bacia do Jaguari','r'],[RAMPA.Camanducaia,'Bacia do Camanducaia','r'],['#bdbdbd','Área urbanizada']]},
  {id:'cursos', tabs:['mun','nasc'], name:'Córregos e demais cursos d\'água', fs:'hidrografia mapeada', color:'#5aa0dc', onIn:['mun','nasc'], url:'data/drenagem.geojson', pane:'cursos',
   style:()=>({color:'#5aa0dc', weight:1.2, interactive:false}), legend:[['#5aa0dc','Córregos e cursos d\'água','l']]},
  {id:'rios', tabs:['mun','nasc'], name:'Rios principais', fs:'Jaguari · Camanducaia · Atibaia', color:'#0b5cab', onIn:['mun','nasc'], url:'data/rios_principais.geojson', pane:'cursos', special:'rios',
@@ -547,7 +558,7 @@ function desenhaLegenda(){
   let h = '', n = 0;
   let ultimo = '';
   DEFS.forEach(d => { const c = camadas[d.id]; if (!c.on || !d.legend) return; n++;
-    const tit = d.legendTitle || d.name; h += (tit === ultimo ? '' : `<div class="lg-t">${esc(tit)}</div>`); ultimo = tit; h += d.legend.map(([cor, txt, t]) => `<div class="li"><span class="sw ${t==='c'?'c':''}" style="background:${t==='l'?'transparent':cor};${t==='l'?`border:0;border-top:3px solid ${cor};height:0;margin-top:5px`:''}"></span>${esc(txt)}</div>`).join(''); });
+    const tit = d.legendTitle || d.name; h += (tit === ultimo ? '' : `<div class="lg-t">${esc(tit)}</div>`); ultimo = tit; h += d.legend.map(([cor, txt, t]) => t === 'r' ? `<div class="li"><span class="rp">${cor.map(c => `<i style="background:${c}"></i>`).join('')}</span>${esc(txt)}</div>` : `<div class="li"><span class="sw ${t==='c'?'c':''}" style="background:${t==='l'?'transparent':cor};${t==='l'?`border:0;border-top:3px solid ${cor};height:0;margin-top:5px`:''}"></span>${esc(txt)}</div>`).join(''); });
   $('#lgBody').innerHTML = h || '<div class="li">Nenhuma camada ativa</div>';
   $('#lgHead span').textContent = n ? n + ' camada' + (n>1?'s':'') : '–';
 }
@@ -574,7 +585,7 @@ DEFS.forEach(d => {
   });
 });
 function abreAba(id){
-  tabAtual = id;
+  tabAtual = id; body.classList.toggle('tab-acoes', id === 'acoes');
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.id === id));
   document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + id));
   $('#tabBody').scrollTop = 0;
@@ -584,6 +595,7 @@ function abreAba(id){
     else if (camadas[d.id].on && !(d.onIn || []).includes(id)) liga(d.id, false); });
 }
 liga('limite', true);
+$('#rampasPanel').innerHTML = '<div class="src" style="margin:0 0 4px">Vulnerabilidade: muito baixa → muito alta</div>' + Object.entries(RAMPA).map(([b, cs]) => `<div class="li" style="display:flex;align-items:center;gap:8px;margin:3px 0;font:500 12px var(--font-body);color:var(--ink-soft)"><span class="rp">${cs.map(c => `<i style="background:${c};width:26px;height:14px"></i>`).join('')}</span>Bacia do ${b}</div>`).join('');
 
 /* ============================================================ modo técnico */
 function setTech(on){
