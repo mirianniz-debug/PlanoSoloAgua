@@ -69,6 +69,7 @@
   .kpi .l{font:500 11.5px/1.3 var(--font-body);color:var(--ink-soft);margin-top:5px;}
   .kpi.water .n{color:var(--water);} .kpi.earth .n{color:#2a0f6b;} .kpi.wide{grid-column:1 / -1;}
 
+  .grp{font:700 11px var(--font-body);color:var(--ink-soft);margin:10px 0 2px 8px;letter-spacing:.02em;}
   .layer-row{display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer;user-select:none;}
   .layer-row:hover{background:var(--hover);}
   .layer-row input{appearance:none;-webkit-appearance:none;width:17px;height:17px;margin-top:1px;flex:0 0 auto;border:1.6px solid #b7bcaa;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:var(--panel);}
@@ -188,7 +189,7 @@
         </div>
         <div class="note blue"><b>Camanducaia:</b> a captação de água do Rio Camanducaia ainda <b>não está em operação</b>. Por isso, as ações mais urgentes se concentram no Rio Jaguari.</div>
 
-        <p class="txt">No mapa você vê os <b>rios principais</b> (traço azul mais grosso, com o nome), os córregos e os <b>pontos de captação</b>. A linha vermelha tracejada é a <b>zona a montante da captação</b>: toda a água que cai nela chega ao ponto de captação.</p>
+        <p class="txt">No mapa você vê os <b>rios principais</b> (traço azul grosso, com o nome), os córregos e os <b>pontos de captação</b>. As cores mostram a <b>vulnerabilidade à erosão</b> de cada <b>sub-bacia de contribuição</b> (pedaço do terreno cuja água escoa para um mesmo ponto do rio): quanto mais quente a cor, maior o risco de a terra ser levada pela chuva.</p>
 
         <h3>Camadas</h3>
         <div id="layers-mun"></div>
@@ -201,9 +202,6 @@
           <tr><td>Atibaia</td><td>24,30</td><td>11</td><td><span class="pill" style="background:#1f7a44">Baixa</span></td></tr>
         </table>
         <div class="src">Plano 2026, Tabelas 2.9 e 5.1. Área rural = zonas rural e de expansão urbana.</div>
-
-        <h3>O que é cada zona?</h3>
-        <p class="txt"><b>Zona urbana:</b> cidade e loteamentos consolidados. <b>Expansão urbana:</b> bordas da cidade destinadas à futura ocupação. <b>Zona rural:</b> campo, onde se concentram as ações do Plano. As zonas urbana e de expansão também são avaliadas nas áreas de proteção dos rios e nascentes.</p>
 
         <div class="tech-only">
           <h3>Dados e captações <span class="badge-tech">TÉCNICO</span></h3>
@@ -404,36 +402,27 @@ const TODAS = ['mun','nasc','acoes'];
 const DEFS = [
  {id:'limite', tabs:['*'], name:'Limite municipal', fs:'IBGE, 2025', color:'#16232e', onIn:['*'], always:true, hideRow:true, url:'data/limite.geojson', pane:'bacias',
   style:()=>({color:'#16232e', weight:2.5, fill:false, interactive:false}), legend:[['#16232e','Limite municipal','l']]},
- {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Atibaia · Jaguari · Camanducaia', color:'#1d6fb8', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
-  style:f=>({color:'#fff', weight:1.5, fillOpacity:.32, fillColor:{'Atibaia':'#6baed6','Jaguari':'#e08a4f','Camanducaia':'#74b87a'}[f.properties.nome]||'#999'}),
+ {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Atibaia · Jaguari · Camanducaia', color:'#d9731f', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
+  style:f=>({color:{'Atibaia':'#2f7fc1','Jaguari':'#d9731f','Camanducaia':'#2f9a45'}[f.properties.nome]||'#555', weight:3.2, fillOpacity:0, opacity:.95}),
   popup:f=>`<h4>Bacia do Rio ${esc(f.properties.nome)}</h4>${pp('Área no município', fmt(f.properties.area_km2,1)+' km²')}${pp('Nascentes (ANA)', f.properties.n_nascentes)}`,
-  legend:[['#6baed6','Bacia do Atibaia'],['#e08a4f','Bacia do Jaguari'],['#74b87a','Bacia do Camanducaia']]},
- {id:'zonas', tabs:['mun'], name:'Zonas urbana, de expansão e rural', fs:'Zoneamento de 2026', color:'#c98a1f', url:'data/zonas.geojson', pane:'zonas',
-  style:f=>({color:'#fff', weight:1, fillOpacity:.55, fillColor:{'Zona urbana':'#8c9199','Zona de expansão urbana':'#e0b04a','Zona rural':'#9bc46f'}[f.properties.zona]||'#999'}),
-  popup:f=>`<h4>${esc(f.properties.zona)}</h4>${pp('Área', fmt(f.properties.area_km2,1)+' km²')}${pp('Do município', fmt(f.properties.pct,1)+' %')}`,
-  legend:[['#8c9199','Zona urbana'],['#e0b04a','Zona de expansão urbana'],['#9bc46f','Zona rural']]},
- {id:'car', tabs:['mun'], name:'Imóveis rurais (CAR)', fs:'Cadastro Ambiental Rural, out/2026', color:'#8a6d3b', url:'data/car.geojson', pane:'car',
-  style:()=>({color:'#8a6d3b', weight:.9, fillOpacity:.06, fillColor:'#8a6d3b'}),
-  popup:f=>`<h4>Imóvel rural (CAR)</h4>${pp('Área', fmt(f.properties.area_ha,1)+' ha')}${pp('Bacia', esc(f.properties.bacia))}`,
-  legend:[['#8a6d3b','Imóvel rural (CAR)','l']]},
-
- /* ----- hidrografia: aparece nas três abas ----- */
- {id:'cursos', tabs:TODAS, name:'Córregos e demais cursos d\'água', fs:'hidrografia mapeada', color:'#5aa0dc', onIn:['mun','nasc'], url:'data/drenagem.geojson', pane:'cursos',
+  legend:[['#2f7fc1','Bacia do Atibaia','l'],['#d9731f','Bacia do Jaguari','l'],['#2f9a45','Bacia do Camanducaia','l']]},
+ {id:'contrib', tabs:['mun'], name:'Áreas vulneráveis: sub-bacias de contribuição', fs:'vulnerabilidade média à erosão (Mapa 5) · 354 áreas', color:'#fc8d59', onIn:['mun'], url:'data/contribuicao.geojson', pane:'contrib',
+  style:f=>({color:'#fff', weight:.6, fillOpacity:.6, fillColor:COR_VULC[f.properties.vulnerabilidade_classe]||'#bdbdbd'}),
+  popup:f=>{ const p=f.properties; return `<h4>Sub-bacia de contribuição</h4>${pp('Bacia', esc(p.sub_bacia)+' · prioridade '+esc(p.prioridade_bacia))}${pp('Vulnerabilidade', esc(p.vulnerabilidade_classe||'Urbanizada'))}${p.ordem_na_bacia?pp('Ordem na bacia', p.ordem_na_bacia+'ª'):''}${p.a_montante_de?pp('A montante de', esc(p.a_montante_de)):''}${pp('Área', fmt(p.area_km2,2)+' km²')}`; },
+  legendTitle:'Vulnerabilidade à erosão (sub-bacias)',
+  legend:[['#1a9850','Vulnerabilidade muito baixa'],['#91cf60','Baixa'],['#fee08b','Média'],['#fc8d59','Alta'],['#d73027','Muito alta'],['#bdbdbd','Urbanizada']]},
+ {id:'cursos', tabs:['mun','nasc'], name:'Córregos e demais cursos d\'água', fs:'hidrografia mapeada', color:'#5aa0dc', onIn:['mun','nasc'], url:'data/drenagem.geojson', pane:'cursos',
   style:()=>({color:'#5aa0dc', weight:1.2, interactive:false}), legend:[['#5aa0dc','Córregos e cursos d\'água','l']]},
- {id:'rios', tabs:TODAS, name:'Rios principais', fs:'Jaguari · Camanducaia · Atibaia', color:'#0b5cab', onIn:TODAS, url:'data/rios_principais.geojson', pane:'cursos', special:'rios',
+ {id:'rios', tabs:['mun','nasc'], name:'Rios principais', fs:'Jaguari · Camanducaia · Atibaia', color:'#0b5cab', onIn:['mun','nasc'], url:'data/rios_principais.geojson', pane:'cursos', special:'rios',
   style:()=>({color:'#0b5cab', weight:3.6, opacity:.95, lineCap:'round'}),
   popup:f=>`<h4>${esc(f.properties.nome)}</h4><p style="margin:0">Rio principal: a APP de 50 m de cada margem é a primeira prioridade de recomposição florestal.</p>`,
   legend:[['#0b5cab','Rios principais (Jaguari, Camanducaia, Atibaia)','l']]},
- {id:'captacoes', tabs:['mun','acoes'], name:'Captações de água para abastecimento', fs:'SP Águas · foco imediato no Jaguari', color:'#0e1c4a', onIn:['mun','acoes'], url:'data/captacoes.geojson', pane:'pts',
+ {id:'captacoes', tabs:['mun'], name:'Captações de água para abastecimento', fs:'SP Águas · foco imediato no Jaguari', color:'#0e1c4a', onIn:['mun'], url:'data/captacoes.geojson', pane:'pts',
   point:(f,ll)=>{ const jag = /Jaguari/.test(f.properties.rio);
     return L.circleMarker(ll, {pane:'pts', radius:9, color:'#fff', weight:2.5, fillColor:jag?'#0e1c4a':'#7d8bb5', fillOpacity:1})
       .bindTooltip(jag ? 'Captação do Jaguari (em operação)' : 'Captação do Camanducaia (ainda não opera)', {permanent:true, direction:'right', offset:[10,0], className:'captlbl'}); },
   popup:f=>{ const jag = /Jaguari/.test(f.properties.rio); return `<h4>Captação no ${esc(f.properties.rio)}</h4>${pp('Finalidade','Abastecimento público')}${pp('Situação', jag?'<b>em operação</b>':'<b>ainda não está em operação</b>')}`; },
   legend:[['#0e1c4a','Captação em operação (Jaguari)','c'],['#7d8bb5','Captação ainda não ativa (Camanducaia)','c']]},
- {id:'montante', tabs:['mun','acoes'], name:'Zona a montante das captações (prioridade)', fs:'sobe a prioridade · não é tudo "a recompor"', color:'#b4441f', onIn:['mun','acoes'], url:'data/montante.geojson', pane:'terra',
-  style:()=>({color:'#8a1c05', weight:3, dashArray:'9 6', fillOpacity:0}),
-  popup:f=>`<h4>A montante da captação do Rio ${esc(f.properties.rio)}</h4>${pp('Área de contribuição', fmt(f.properties.area_km2,2)+' km²')}<p style="margin:6px 0 0;font-size:11.5px">Toda a água desta área chega à captação. Por isso, aqui as APPs e as áreas de maior vulnerabilidade têm prioridade máxima. Isso <b>não</b> significa plantar floresta em toda a área.</p>`,
-  legend:[['#b4441f','Zona a montante da captação (prioridade)','l']]},
  {id:'outorgas', tabs:['mun'], tech:true, name:'Outorgas de captação e lançamento nos rios', fs:'ANA / SP Águas · 22 pontos', color:'#1d6fb8', url:'data/outorgas.geojson', pane:'pts',
   point:(f,ll)=>L.circleMarker(ll, {pane:'pts', radius:5.5, color:'#fff', weight:1.4, fillColor:f.properties.tipo==='Captação'?'#1d6fb8':'#b4441f', fillOpacity:1}),
   popup:f=>`<h4>${esc(f.properties.tipo)} · ${esc(f.properties.rio)}</h4>${pp('Finalidade', esc(f.properties.finalidade))}${pp('Vazão (m³/h)', esc(f.properties.vazao_m3h||'–'))}${pp('Órgão', esc(f.properties.orgao))}`,
@@ -442,8 +431,6 @@ const DEFS = [
   point:(f,ll)=>L.circleMarker(ll, {pane:'pts', radius:3.5, color:'#fff', weight:1, fillColor:'#6b767c', fillOpacity:.95}),
   popup:f=>`<h4>Poço</h4>${pp('Finalidade', esc(f.properties.finalidade))}${pp('Vazão média', esc(f.properties.vazao_media||'–'))}`,
   legend:[['#6b767c','Poço cadastrado','c']]},
-
- /* ----- nascentes e áreas de proteção ----- */
  {id:'app_com', tabs:['nasc'], name:'Área de proteção (APP) com floresta', fs:'rios 50 m · afluentes 30 m · nascentes 50 m', color:COR_APP_COM, onIn:['nasc'], url:'data/app.geojson', pane:'app',
   filter:f=>f.properties.cobertura==='Com floresta',
   style:()=>({stroke:false, fillOpacity:.6, fillColor:COR_APP_COM}),
@@ -457,17 +444,30 @@ const DEFS = [
  {id:'nascentes', tabs:['nasc'], name:'Nascentes (cor = vulnerabilidade)', fs:'ANA BHO 2015 · 139 pontos · as 5 prioritárias numeradas', color:'#6a3fb5', onIn:['nasc'], url:'data/nascentes.geojson', pane:'pts', special:'nascentes',
   legendTitle:'Vulnerabilidade da nascente',
   legend:[['#d9ccf2','Muito baixa','c'],['#b9a3e3','Baixa','c'],['#9575cd','Média','c'],['#6a3fb5','Alta','c'],[COR_PRIOR,'Muito alta: nascente prioritária (nº)','c'],['#9aa0a6','Área urbanizada','c']]},
-
- /* ----- prioridades e ações ----- */
- {id:'contrib', tabs:['acoes'], name:'Sub-bacias de contribuição (vulnerabilidade)', fs:'média do Mapa 5 · 354 áreas', color:'#fc8d59', onIn:['acoes'], url:'data/contribuicao.geojson', pane:'contrib',
-  style:f=>({color:'#fff', weight:.6, fillOpacity:.55, fillColor:COR_VULC[f.properties.vulnerabilidade_classe]||'#bdbdbd'}),
-  popup:f=>{ const p=f.properties; return `<h4>Sub-bacia de contribuição</h4>${pp('Bacia', esc(p.sub_bacia)+' · prioridade '+esc(p.prioridade_bacia))}${pp('Vulnerabilidade', esc(p.vulnerabilidade_classe||'Urbanizada'))}${p.ordem_na_bacia?pp('Ordem na bacia', p.ordem_na_bacia+'ª'):''}${p.a_montante_de?pp('A montante de', esc(p.a_montante_de)):''}${pp('Área', fmt(p.area_km2,2)+' km²')}`; },
-  legend:[['#1a9850','Vulnerabilidade muito baixa'],['#91cf60','Baixa'],['#fee08b','Média'],['#fc8d59','Alta'],['#d73027','Muito alta'],['#bdbdbd','Urbanizada']]},
- {id:'a_recompor', tabs:['acoes'], name:'Áreas a recompor nas APPs', fs:'rios, afluentes, massas d\'água e nascentes · 4,7 km²', color:'#7b3fa0', onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
-  filter:f=>f.properties.classe!=='A montante de captação',
-  style:f=>({color:COR_REC[f.properties.classe]||'#555', weight:1, fillOpacity:.8, fillColor:COR_REC[f.properties.classe]||'#555'}),
+ {id:'rec_rio', grupo:'Áreas a recompor nas APPs', tabs:['acoes'], name:'APP do rio principal', fs:'1,43 km² a recompor', color:COR_REC['Rio principal'], onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
+  legendTitle:'Áreas a recompor nas APPs',
+  filter:f=>f.properties.classe==='Rio principal',
+  style:()=>({color:COR_REC['Rio principal'], weight:1, fillOpacity:.85, fillColor:COR_REC['Rio principal']}),
   popup:f=>`<h4>A recompor · ${esc(f.properties.classe)}</h4>${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Área', fmt(f.properties.area_km2,2)+' km²')}`,
-  legend:[['#1d6fb8','Rio principal'],['#2aa6a6','Afluentes'],['#7fb4e0','Massas d\'água'],['#7b3fa0','Nascentes']]},
+  legend:[[COR_REC['Rio principal'],'APP do rio principal']]},
+ {id:'rec_afl', grupo:'Áreas a recompor nas APPs', tabs:['acoes'], name:'APP dos afluentes', fs:'2,54 km² a recompor', color:COR_REC['Afluentes'], onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
+  legendTitle:'Áreas a recompor nas APPs',
+  filter:f=>f.properties.classe==='Afluentes',
+  style:()=>({color:COR_REC['Afluentes'], weight:1, fillOpacity:.85, fillColor:COR_REC['Afluentes']}),
+  popup:f=>`<h4>A recompor · ${esc(f.properties.classe)}</h4>${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Área', fmt(f.properties.area_km2,2)+' km²')}`,
+  legend:[[COR_REC['Afluentes'],'APP dos afluentes']]},
+ {id:'rec_mas', grupo:'Áreas a recompor nas APPs', tabs:['acoes'], name:"APP das massas d'água", fs:'0,27 km² a recompor', color:COR_REC["Massas d'água"], onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
+  legendTitle:'Áreas a recompor nas APPs',
+  filter:f=>f.properties.classe==="Massas d'água",
+  style:()=>({color:COR_REC["Massas d'água"], weight:1, fillOpacity:.85, fillColor:COR_REC["Massas d'água"]}),
+  popup:f=>`<h4>A recompor · ${esc(f.properties.classe)}</h4>${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Área', fmt(f.properties.area_km2,2)+' km²')}`,
+  legend:[[COR_REC["Massas d'água"],"APP das massas d'água"]]},
+ {id:'rec_nas', grupo:'Áreas a recompor nas APPs', tabs:['acoes'], name:'APP das nascentes', fs:'0,46 km² a recompor', color:COR_REC['Nascentes'], onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
+  legendTitle:'Áreas a recompor nas APPs',
+  filter:f=>f.properties.classe==='Nascentes',
+  style:()=>({color:COR_REC['Nascentes'], weight:1, fillOpacity:.85, fillColor:COR_REC['Nascentes']}),
+  popup:f=>`<h4>A recompor · ${esc(f.properties.classe)}</h4>${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Área', fmt(f.properties.area_km2,2)+' km²')}`,
+  legend:[[COR_REC['Nascentes'],'APP das nascentes']]},
  {id:'terra', tabs:['acoes'], name:'Terraceamento e controle de erosão', fs:'0,44 km² · zona rural, vulnerabilidade alta', color:'#8c5a2b', onIn:['acoes'], url:'data/terraceamento.geojson', pane:'terra',
   style:()=>({color:'#6b3f17', weight:1.2, fillOpacity:.85, fillColor:'#c98a4a'}),
   popup:()=>`<h4>Terraceamento, voçorocas e estradas rurais</h4><p style="margin:0">Área rural com vulnerabilidade Alta ou Muito Alta, uso agropecuário, fora de floresta e APP.</p>`,
@@ -475,9 +475,7 @@ const DEFS = [
  {id:'programa', tabs:['acoes'], name:'Reflorestamento do Programa Bacias', fs:'152,5 ha mapeados (inclui trechos fora do município)', color:'#1f7a44', onIn:['acoes'], url:'data/programa.geojson', pane:'prog',
   style:()=>({color:'#0d3b1f', weight:1.2, fillOpacity:.8, fillColor:'#2fa05a'}),
   popup:f=>{ const p=f.properties; return `<h4>${esc(p.local)}</h4>${pp('Área mapeada (propriedade)', fmt(p.ha_total,1)+' ha')}${pp('Bacia', esc(p.sub_bacia))}`; },
-  legend:[['#2fa05a','Reflorestamento já realizado']]},
- {id:'floresta', tabs:['acoes'], tech:true, name:'Floresta existente (Inventário Florestal 2020)', fs:'usada no cálculo da área a recompor', color:'#1f7a44', url:'data/floresta.geojson', pane:'app',
-  style:()=>({stroke:false, fillOpacity:.4, fillColor:'#1f7a44', interactive:false}), legend:[['#1f7a44','Floresta (Inventário 2020)']]}
+  legend:[['#2fa05a','Reflorestamento já realizado']]}
 ];
 const camadas = {};   // id -> {def, layer, on}
 DEFS.forEach(d => camadas[d.id] = {def:d, layer:null, on:false});
@@ -547,24 +545,28 @@ async function liga(id, on){
 }
 function desenhaLegenda(){
   let h = '', n = 0;
+  let ultimo = '';
   DEFS.forEach(d => { const c = camadas[d.id]; if (!c.on || !d.legend) return; n++;
-    h += `<div class="lg-t">${esc(d.legendTitle || d.name)}</div>` + d.legend.map(([cor, txt, t]) => `<div class="li"><span class="sw ${t==='c'?'c':''}" style="background:${t==='l'?'transparent':cor};${t==='l'?`border:0;border-top:3px solid ${cor};height:0;margin-top:5px`:''}"></span>${esc(txt)}</div>`).join(''); });
+    const tit = d.legendTitle || d.name; h += (tit === ultimo ? '' : `<div class="lg-t">${esc(tit)}</div>`); ultimo = tit; h += d.legend.map(([cor, txt, t]) => `<div class="li"><span class="sw ${t==='c'?'c':''}" style="background:${t==='l'?'transparent':cor};${t==='l'?`border:0;border-top:3px solid ${cor};height:0;margin-top:5px`:''}"></span>${esc(txt)}</div>`).join(''); });
   $('#lgBody').innerHTML = h || '<div class="li">Nenhuma camada ativa</div>';
   $('#lgHead span').textContent = n ? n + ' camada' + (n>1?'s':'') : '–';
 }
 
 /* ============================================================ painel: linhas de camadas e abas */
 const TABS = [
-  {id:'mun',   label:'Município',          ico:'<path d="M3 21V9l9-6 9 6v12z"/><path d="M9 21v-7h6v7"/>'},
+  {id:'mun',   label:'Município e áreas vulneráveis',          ico:'<path d="M3 21V9l9-6 9 6v12z"/><path d="M9 21v-7h6v7"/>'},
   {id:'nasc',  label:'Nascentes e água',   ico:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>'},
   {id:'acoes', label:'Prioridades e ações',ico:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>'}
 ];
 let tabAtual = null;
 TABS.forEach(t => { const b = document.createElement('button'); b.className = 'tab'; b.dataset.id = t.id; b.innerHTML = `<svg viewBox="0 0 24 24">${t.ico}</svg>${t.label}`; b.onclick = () => abreAba(t.id); $('#tabs').appendChild(b); });
+const ultimoGrupo = {};
 DEFS.forEach(d => {
   if (d.hideRow) return;
   d.tabs.forEach(tab => {
     const cont = $('#layers-' + tab); if (!cont) return;
+    if (d.grupo && ultimoGrupo[tab] !== d.grupo){ const h = document.createElement('div'); h.className = 'grp'; h.textContent = d.grupo; cont.appendChild(h); }
+    ultimoGrupo[tab] = d.grupo || null;
     const row = document.createElement('label'); row.className = 'layer-row' + (d.tech ? ' tech-only' : ''); row.dataset.id = d.id; row.style.setProperty('--c', d.color);
     row.innerHTML = `<input type="checkbox"><div><div class="nm">${esc(d.name)}</div><div class="fs">${esc(d.fs||'')}</div></div>`;
     row.querySelector('input').onchange = e => liga(d.id, e.target.checked);
@@ -653,7 +655,7 @@ function ajuda(){
   <h2>Como usar este geoportal</h2>
   <p>Aqui você vê, no mapa, o que o <b>Plano Municipal de Conservação do Solo e da Água no Meio Rural</b> de Jaguariúna propõe para proteger os rios e as nascentes. Revisão 2026.</p>
   <h4>Três passos</h4>
-  <ul><li><b>Escolha uma aba</b> no painel: Município, Nascentes e água ou Prioridades e ações.</li>
+  <ul><li><b>Escolha uma aba</b> no painel: Município e áreas vulneráveis, Nascentes e água ou Prioridades e ações.</li>
   <li><b>Ligue e desligue camadas</b> marcando as caixinhas. A legenda do mapa mostra as cores.</li>
   <li><b>Clique no mapa</b> (nascentes, áreas, propriedades) para ver os detalhes.</li></ul>
   <h4>Modo técnico</h4>
