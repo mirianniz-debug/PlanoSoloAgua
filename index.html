@@ -191,7 +191,7 @@
         </div>
         <div class="note blue"><b>Camanducaia:</b> a captação de água do Rio Camanducaia ainda <b>não está em operação</b>. Por isso, as ações mais urgentes se concentram no Rio Jaguari.</div>
 
-        <p class="txt">No mapa você vê os <b>rios principais</b> (traço azul grosso, com o nome), os córregos e os <b>pontos de captação</b>. As cores mostram a <b>vulnerabilidade à erosão</b> de cada <b>sub-bacia de contribuição</b> (pedaço do terreno cuja água escoa para um mesmo ponto do rio). Cada bacia tem a sua cor: <b style="color:#c62828">Atibaia em vermelho</b>, <b style="color:#1565c0">Jaguari em azul</b> e <b style="color:#2e7d32">Camanducaia em verde</b>. Quanto <b>mais escuro</b> o tom, maior o risco de a terra ser levada pela chuva.</p>
+        <p class="txt">No mapa você vê os córregos e os <b>pontos de captação</b>. As cores mostram a <b>vulnerabilidade à erosão</b> de cada <b>sub-bacia de contribuição</b> (pedaço do terreno cuja água escoa para um mesmo ponto do rio). Cada bacia tem a sua cor: <b style="color:#c62828">Jaguari em vermelho</b> (a de maior prioridade), <b style="color:#1565c0">Atibaia em azul</b> e <b style="color:#2e7d32">Camanducaia em verde</b>. Quanto <b>mais escuro</b> o tom, maior o risco de a terra ser levada pela chuva.</p>
         <div id="rampasPanel"></div>
 
         <h3>Camadas</h3>
@@ -262,6 +262,7 @@
         </div>
 
         <h3>Camadas</h3>
+        <p class="txt">Em destaque estão as <b>sub-bacias de vulnerabilidade alta e muito alta</b>: são as áreas de maior prioridade para as ações. Por cima delas aparecem as APPs a recompor, o terraceamento e o reflorestamento já feito.</p>
         <div id="layers-acoes"></div>
 
         <h3>Como a prioridade é definida</h3>
@@ -396,11 +397,11 @@ const COR_NAS = {'Muito Baixa':'#d9ccf2','Baixa':'#b9a3e3','Média':'#9575cd','A
 const COR_PRIOR = '#2a0f6b';
 /* vulnerabilidade das sub-bacias de contribuição: uma cor por bacia, do branco (muito baixa) ao tom escuro (muito alta) */
 const RAMPA = {
-  'Atibaia':    ['#fff1ee','#fcbba1','#fb6a4a','#cb181d','#67000d'],
-  'Jaguari':    ['#f2f8ff','#c6dbef','#6baed6','#2171b5','#08306b'],
+  'Atibaia':    ['#f2f8ff','#c6dbef','#6baed6','#2171b5','#08306b'],
+  'Jaguari':    ['#fff1ee','#fcbba1','#fb6a4a','#cb181d','#67000d'],
   'Camanducaia':['#f3fbf1','#c7e9c0','#74c476','#238b45','#00441b']};
 const IDX_VUL = {'Muito baixa':0,'Baixa':1,'Média':2,'Alta':3,'Muito alta':4};
-const COR_BACIA = {'Atibaia':'#c62828','Jaguari':'#1565c0','Camanducaia':'#2e7d32'};
+const COR_BACIA = {'Atibaia':'#1565c0','Jaguari':'#c62828','Camanducaia':'#2e7d32'};
 const corVul = p => (RAMPA[p.sub_bacia] && p.vulnerabilidade_classe in IDX_VUL) ? RAMPA[p.sub_bacia][IDX_VUL[p.vulnerabilidade_classe]] : '#bdbdbd';
 const COR_VULC = {'Muito baixa':'#1a9850','Baixa':'#91cf60','Média':'#fee08b','Alta':'#fc8d59','Muito alta':'#d73027'};
 const COR_REC = {'Rio principal':'#1d6fb8','Afluentes':'#2aa6a6',"Massas d'água":'#7fb4e0','Nascentes':'#7b3fa0'};
@@ -413,7 +414,7 @@ const TODAS = ['mun','nasc','acoes'];
 const DEFS = [
  {id:'limite', tabs:['*'], name:'Limite municipal', fs:'IBGE, 2025', color:'#16232e', onIn:['*'], always:true, hideRow:true, url:'data/limite.geojson', pane:'bacias',
   style:()=>({color:'#16232e', weight:2.5, fill:false, interactive:false}), legend:[['#16232e','Limite municipal','l']]},
- {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Atibaia (vermelho) · Jaguari (azul) · Camanducaia (verde)', color:'#1565c0', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
+ {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Jaguari (vermelho) · Atibaia (azul) · Camanducaia (verde)', color:'#c62828', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
   style:f=>({color:COR_BACIA[f.properties.nome]||'#555', weight:3.2, fillOpacity:0, opacity:.95}),
   popup:f=>`<h4>Bacia do Rio ${esc(f.properties.nome)}</h4>${pp('Área no município', fmt(f.properties.area_km2,1)+' km²')}${pp('Nascentes (ANA)', f.properties.n_nascentes)}`,
   legend:[[COR_BACIA.Atibaia,'Limite da bacia do Atibaia','l'],[COR_BACIA.Jaguari,'Limite da bacia do Jaguari','l'],[COR_BACIA.Camanducaia,'Limite da bacia do Camanducaia','l']]},
@@ -424,7 +425,7 @@ const DEFS = [
   legend:[[RAMPA.Atibaia,'Bacia do Atibaia','r'],[RAMPA.Jaguari,'Bacia do Jaguari','r'],[RAMPA.Camanducaia,'Bacia do Camanducaia','r'],['#bdbdbd','Área urbanizada']]},
  {id:'cursos', tabs:['mun','nasc'], name:'Córregos e demais cursos d\'água', fs:'hidrografia mapeada', color:'#5aa0dc', onIn:['mun','nasc'], url:'data/drenagem.geojson', pane:'cursos',
   style:()=>({color:'#5aa0dc', weight:1.2, interactive:false}), legend:[['#5aa0dc','Córregos e cursos d\'água','l']]},
- {id:'rios', tabs:['mun','nasc'], name:'Rios principais', fs:'Jaguari · Camanducaia · Atibaia', color:'#0b5cab', onIn:['mun','nasc'], url:'data/rios_principais.geojson', pane:'cursos', special:'rios',
+ {id:'rios', tabs:['nasc'], name:'Rios principais', fs:'Jaguari · Camanducaia · Atibaia', color:'#0b5cab', onIn:['nasc'], url:'data/rios_principais.geojson', pane:'cursos', special:'rios',
   style:()=>({color:'#0b5cab', weight:3.6, opacity:.95, lineCap:'round'}),
   popup:f=>`<h4>${esc(f.properties.nome)}</h4><p style="margin:0">Rio principal: a APP de 50 m de cada margem é a primeira prioridade de recomposição florestal.</p>`,
   legend:[['#0b5cab','Rios principais (Jaguari, Camanducaia, Atibaia)','l']]},
@@ -455,6 +456,10 @@ const DEFS = [
  {id:'nascentes', tabs:['nasc'], name:'Nascentes (cor = vulnerabilidade)', fs:'ANA BHO 2015 · 139 pontos · as 5 prioritárias numeradas', color:'#6a3fb5', onIn:['nasc'], url:'data/nascentes.geojson', pane:'pts', special:'nascentes',
   legendTitle:'Vulnerabilidade da nascente',
   legend:[['#d9ccf2','Muito baixa','c'],['#b9a3e3','Baixa','c'],['#9575cd','Média','c'],['#6a3fb5','Alta','c'],[COR_PRIOR,'Muito alta: nascente prioritária (nº)','c'],['#9aa0a6','Área urbanizada','c']]},
+ {id:'prioritarias', tabs:['acoes'], name:'Áreas de maior prioridade: vulnerabilidade alta e muito alta', fs:'sub-bacias de contribuição · Jaguari vermelho, Atibaia azul, Camanducaia verde', color:'#8a1c05', onIn:['acoes'], url:'data/contribuicao.geojson', pane:'contrib',
+  filter:f=>['Alta','Muito alta'].includes(f.properties.vulnerabilidade_classe),
+  style:f=>({color:'#1b1b1b', weight:1.6, fillOpacity:.85, fillColor:corVul(f.properties)}),
+  popup:f=>{ const p=f.properties; return `<h4>Área de maior prioridade</h4>${pp('Bacia', esc(p.sub_bacia)+' · prioridade '+esc(p.prioridade_bacia))}${pp('Vulnerabilidade', '<b>'+esc(p.vulnerabilidade_classe)+'</b>')}${p.ordem_na_bacia?pp('Ordem na bacia', p.ordem_na_bacia+'ª'):''}${pp('Área', fmt(p.area_km2,2)+' km²')}`; }},
  {id:'rec_rio', grupo:'Áreas a recompor nas APPs', tabs:['acoes'], name:'APP do rio principal', fs:'1,43 km² a recompor', color:COR_REC['Rio principal'], onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
   legendTitle:'Áreas a recompor nas APPs',
   filter:f=>f.properties.classe==='Rio principal',
