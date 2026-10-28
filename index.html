@@ -67,7 +67,7 @@
   .kpi .n{font:600 21px/1 var(--font-mono);color:var(--forest-dark);}
   .kpi .n small{font-size:12px;font-weight:500;margin-left:2px;}
   .kpi .l{font:500 11.5px/1.3 var(--font-body);color:var(--ink-soft);margin-top:5px;}
-  .kpi.water .n{color:var(--water);} .kpi.earth .n{color:var(--earth);} .kpi.wide{grid-column:1 / -1;}
+  .kpi.water .n{color:var(--water);} .kpi.earth .n{color:#2a0f6b;} .kpi.wide{grid-column:1 / -1;}
 
   .layer-row{display:flex;align-items:flex-start;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer;user-select:none;}
   .layer-row:hover{background:var(--hover);}
@@ -131,7 +131,10 @@
   .leaflet-popup-content h4{margin:0 0 6px;font:600 14px var(--font-display);}
   .pp{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dotted var(--line-strong);padding:2px 0;}
   .pp span:first-child{color:var(--muted);} .pp span:last-child{font-weight:600;text-align:right;}
-  .numlbl{background:#b4441f;color:#fff;border:2px solid #fff;border-radius:50%;width:24px;height:24px;line-height:20px;text-align:center;font:700 11px var(--font-body);box-shadow:0 1px 4px rgba(0,0,0,.4);}
+  .numlbl{background:#2a0f6b;color:#fff;border:2px solid #fff;border-radius:50%;width:24px;height:24px;line-height:20px;text-align:center;font:700 11px var(--font-body);box-shadow:0 1px 4px rgba(0,0,0,.4);}
+  .riolbl{font:italic 700 11.5px var(--font-body);color:#0b4f9c;white-space:nowrap;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 4px #fff,0 0 4px #fff;pointer-events:none;}
+  .captlbl{background:rgba(255,255,255,.95);border:1px solid #0e1c4a;border-radius:6px;color:#0e1c4a;font:700 11px var(--font-body);padding:2px 6px;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+  .captlbl::before{display:none;}
   .proglbl{font:600 10.5px var(--font-body);color:#0d3b1f;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff;white-space:nowrap;}
 
   #modal{position:fixed;inset:0;background:rgba(14,28,74,.55);z-index:3000;display:none;align-items:center;justify-content:center;padding:16px;}
@@ -185,6 +188,8 @@
         </div>
         <div class="note blue"><b>Camanducaia:</b> a captação de água do Rio Camanducaia ainda <b>não está em operação</b>. Por isso, as ações mais urgentes se concentram no Rio Jaguari.</div>
 
+        <p class="txt">No mapa você vê os <b>rios principais</b> (traço azul mais grosso, com o nome), os córregos e os <b>pontos de captação</b>. A linha vermelha tracejada é a <b>zona a montante da captação</b>: toda a água que cai nela chega ao ponto de captação.</p>
+
         <h3>Camadas</h3>
         <div id="layers-mun"></div>
 
@@ -219,6 +224,7 @@
         <div class="note"><b>Atenção:</b> os pontos vêm de mapeamento por imagens e ainda <b>não foram verificados em campo</b>. A verificação, começando pelas prioritárias, é uma das ações do Plano.</div>
 
         <h3>Camadas</h3>
+        <p class="txt">As áreas de proteção em <b style="color:#2e7d32">verde</b> já têm floresta. As em <b style="color:#d97706">laranja</b> não têm e <b>precisam ser reflorestadas</b>. As nascentes são os pontos em <b style="color:#6a3fb5">roxo</b>: quanto mais escuro, maior a vulnerabilidade à erosão.</p>
         <div id="layers-nasc"></div>
 
         <h3>Buscar nascente</h3>
@@ -226,13 +232,13 @@
         <div class="src" id="buscaMsg"></div>
 
         <h3>Nascentes prioritárias</h3>
-        <p class="txt">Têm pelo menos 25% da área de proteção (raio de 50 m) em vulnerabilidade <b>Alta ou Muito Alta</b> à erosão. Clique na linha para ver no mapa.</p>
+        <p class="txt">Têm pelo menos 25% da área de proteção (raio de 50 m) em vulnerabilidade <b>Alta ou Muito Alta</b> à erosão. No mapa aparecem <b>numeradas, na cor mais escura</b> (muito alta). Clique na linha para ver no mapa.</p>
         <table class="t" id="tPrior"><tr><th>Nº</th><th>Bacia</th><th>Zona</th><th>APP em risco</th><th>Floresta</th></tr></table>
         <div class="src">Plano 2026, Tabela 3.8. APP em risco = % da APP em vulnerabilidade Alta ou Muito Alta.</div>
 
         <h3>Como estão as 139 nascentes?</h3>
         <div class="bar" id="barVul"></div><div class="keys" id="keysVul"></div>
-        <div class="src">Classe de vulnerabilidade à erosão no local do ponto (Tabela 3.7).</div>
+        <div class="src">Classe de vulnerabilidade à erosão no local do ponto (Tabela 3.7). As 5 prioritárias ficam em destaque no mapa mesmo quando a classe do ponto é menor, porque o critério olha toda a área de proteção.</div>
 
         <div class="tech-only">
           <h3>Anexo I – todas as nascentes <span class="badge-tech">TÉCNICO</span></h3>
@@ -249,7 +255,7 @@
         <p class="lead">O Plano indica <b>onde</b> agir primeiro: recompor a mata junto aos rios e nascentes, controlar a erosão nas áreas mais frágeis e proteger a água que chega à captação de Jaguariúna.</p>
         <div class="kpis">
           <div class="kpi"><div class="n">152<small>ha</small></div><div class="l">já reflorestados pelo Programa Bacias</div></div>
-          <div class="kpi"><div class="n">≈1,6<small>mi</small></div><div class="l">de mudas para recompor as áreas prioritárias</div></div>
+          <div class="kpi"><div class="n">≈0,8<small>mi</small></div><div class="l">de mudas para recompor as APPs de rios, afluentes e nascentes</div></div>
           <div class="kpi"><div class="n">0,44<small>km²</small></div><div class="l">para terraceamento e controle de erosão</div></div>
           <div class="kpi"><div class="n">19</div><div class="l">biodigestores de saneamento rural instalados</div></div>
         </div>
@@ -260,16 +266,17 @@
         <h3>Como a prioridade é definida</h3>
         <p class="txt"><b>1º nível – entre as bacias:</b> Jaguari (alta), Camanducaia (média) e Atibaia (baixa).<br>
         <b>2º nível – dentro de cada bacia:</b> as sub-bacias de contribuição com maior vulnerabilidade à erosão são executadas primeiro.<br>
-        <b>Entre as áreas:</b> rios principais e nascentes (prioridade muito alta), afluentes (alta) e as áreas a montante das captações, que são sempre prioritárias.</p>
+        <b>Entre as áreas:</b> rios principais e nascentes (prioridade muito alta) e afluentes (alta). A <b>zona a montante das captações</b> sobe a prioridade de tudo o que está dentro dela, mas <b>isso não quer dizer plantar floresta em toda a área</b>: a recomposição acontece nas APPs e nas áreas mais frágeis, por adesão dos proprietários.</p>
 
         <h3>Áreas a recompor (km²)</h3>
         <table class="t">
           <tr><th>Área de proteção</th><th>Atibaia</th><th>Jaguari</th><th>Camanducaia</th></tr>
           <tr><td>Rios principais</td><td>0,21</td><td>0,67</td><td>0,56</td></tr>
           <tr><td>Afluentes e nascentes</td><td>0,71</td><td>1,27</td><td>1,29</td></tr>
-          <tr><td>A montante da captação</td><td>–</td><td>2,05</td><td>3,05</td></tr>
+          <tr class="tot"><td>Total nas APPs</td><td>0,92</td><td>1,94</td><td>1,85</td></tr>
         </table>
         <div class="src">Tabela 5.2. Descontados a floresta existente (Inventário Florestal 2020), o reflorestamento já feito e as áreas urbanizadas. As nascentes (0,08 / 0,21 / 0,17) já estão dentro dos afluentes.</div>
+        <div class="note"><b>A montante da captação:</b> o Plano calcula também o terreno sem floresta dessa zona (2,05 km² no Jaguari e 3,05 km² no Camanducaia). Esse número é um <b>teto</b>: inclui lavouras, pastos e estradas e <b>não será todo plantado</b>. Por isso ele não aparece como área a recompor no mapa. Está no modo técnico, como "potencial".</div>
 
         <h3>O que já foi feito</h3>
         <div class="tl">
@@ -296,6 +303,10 @@
           <details><summary>Mapa de uso do solo de 2026</summary><div class="in">
             <p class="txt">Classificação supervisionada (Random Forest, 150 árvores de decisão) da imagem CBERS-4A de maio de 2026, fusionada para 2 m. Validação com 175 pontos: exatidão de 90,9% (Kappa 0,89).</p>
           </div></details>
+          <details><summary>Por que a montante da captação não é "tudo a recompor"</summary><div class="in">
+            <p class="txt">A zona a montante tem 8,1 km² (3,5 no Jaguari e 4,6 no Camanducaia). Os 5,1 km² de "potencial" são todo o terreno dessa zona sem floresta, e só 0,28 km² deles coincidem com APP sem floresta. Cerca de 0,24 km² coincidem com as áreas de terraceamento (a mesma terra não pode receber as duas ações). Dos 5,1 km², 41% estão em sub-bacias de vulnerabilidade muito alta, 22% em alta e 37% em média, baixa ou muito baixa.</p>
+            <p class="txt">Por isso, a montante da captação o Plano usa a posição como critério de <b>prioridade</b> (executar primeiro), e a meta real de plantio deve ser definida por propriedade.</p>
+          </div></details>
           <details><summary>Sub-bacias de contribuição</summary><div class="in">
             <p class="txt">As 354 áreas de contribuição são as sub-bacias da Base Hidrográfica Ottocodificada da ANA (2015), usadas como unidade de priorização. A vulnerabilidade de cada uma é a média dos pixels do Mapa 5; as classes são quintis.</p>
           </div></details>
@@ -305,9 +316,10 @@
             <tr><th>Linha</th><th>Atibaia</th><th>Jaguari</th><th>Camanducaia</th></tr>
             <tr><td>Rio principal</td><td>35.000</td><td>111.666</td><td>93.333</td></tr>
             <tr><td>Afluentes e nascentes</td><td>118.333</td><td>211.666</td><td>215.000</td></tr>
-            <tr><td>A montante da captação</td><td>–</td><td>341.666</td><td>508.333</td></tr>
-            <tr class="tot"><td>Total</td><td colspan="3">1.634.997 mudas (3 m × 2 m)</td></tr>
+            <tr class="tot"><td>Total nas APPs</td><td>153.333</td><td>323.332</td><td>308.333</td></tr>
+            <tr><td><i>Potencial a montante (teto, não é meta)</i></td><td>–</td><td><i>341.666</i></td><td><i>508.333</i></td></tr>
           </table>
+          <div class="src">Espaçamento de 3 m × 2 m. Nas APPs: 784.998 mudas. O potencial a montante soma mais 849.999 mudas se toda a área sem floresta fosse plantada, o que não é a meta.</div>
 
           <h3>Dados e mapas para baixar <span class="badge-tech">TÉCNICO</span></h3>
           <a class="btn" href="downloads/Mapa6_Prioridades_Recomposicao_Florestal.pdf" target="_blank">📄 Mapa 6 (PDF)</a>
@@ -369,69 +381,98 @@ $('#lgHead').onclick = () => { $('#legend').classList.toggle('min'); };
 
 /* ============================================================ cores e estilos */
 const COR_VUL = {'Muito Baixa':'#1a9850','Baixa':'#91cf60','Média':'#fee08b','Alta':'#fc8d59','Muito Alta':'#d73027','Área Urbanizada e Construções':'#9aa0a6'};
+/* nascentes: escala em roxo, para não se confundir com o verde/laranja das APPs nem com o vermelho da vulnerabilidade das sub-bacias */
+const COR_NAS = {'Muito Baixa':'#d9ccf2','Baixa':'#b9a3e3','Média':'#9575cd','Alta':'#6a3fb5','Área Urbanizada e Construções':'#9aa0a6'};
+const COR_PRIOR = '#2a0f6b';
 const COR_VULC = {'Muito baixa':'#1a9850','Baixa':'#91cf60','Média':'#fee08b','Alta':'#fc8d59','Muito alta':'#d73027'};
-const COR_REC = {'Rio principal':'#1d6fb8','Afluentes':'#2aa6a6',"Massas d'água":'#7fb4e0','Nascentes':'#7b3fa0','A montante de captação':'#b4441f'};
+const COR_REC = {'Rio principal':'#1d6fb8','Afluentes':'#2aa6a6',"Massas d'água":'#7fb4e0','Nascentes':'#7b3fa0'};
+const COR_APP_COM = '#2e7d32', COR_APP_SEM = '#f08c00';
 const pp = (k, v) => `<div class="pp"><span>${k}</span><span>${v}</span></div>`;
 
-/* ============================================================ definição das camadas */
+/* ============================================================ definição das camadas
+   tabs  = abas em que a camada aparece na lista · onIn = abas em que já vem ligada */
+const TODAS = ['mun','nasc','acoes'];
 const DEFS = [
- {id:'limite', tab:'*', name:'Limite municipal', fs:'IBGE, 2025', color:'#16232e', on:true, always:true, hideRow:true, url:'data/limite.geojson', pane:'bacias',
+ {id:'limite', tabs:['*'], name:'Limite municipal', fs:'IBGE, 2025', color:'#16232e', onIn:['*'], always:true, hideRow:true, url:'data/limite.geojson', pane:'bacias',
   style:()=>({color:'#16232e', weight:2.5, fill:false, interactive:false}), legend:[['#16232e','Limite municipal','l']]},
- {id:'bacias', tab:'mun', name:'Bacias hidrográficas', fs:'Atibaia · Jaguari · Camanducaia', color:'#1d6fb8', on:true, url:'data/bacias.geojson', pane:'bacias',
-  style:f=>({color:'#fff', weight:1.5, fillOpacity:.38, fillColor:{'Atibaia':'#6baed6','Jaguari':'#e08a4f','Camanducaia':'#74b87a'}[f.properties.nome]||'#999'}),
+ {id:'bacias', tabs:['mun'], name:'Bacias hidrográficas', fs:'Atibaia · Jaguari · Camanducaia', color:'#1d6fb8', onIn:['mun'], url:'data/bacias.geojson', pane:'bacias',
+  style:f=>({color:'#fff', weight:1.5, fillOpacity:.32, fillColor:{'Atibaia':'#6baed6','Jaguari':'#e08a4f','Camanducaia':'#74b87a'}[f.properties.nome]||'#999'}),
   popup:f=>`<h4>Bacia do Rio ${esc(f.properties.nome)}</h4>${pp('Área no município', fmt(f.properties.area_km2,1)+' km²')}${pp('Nascentes (ANA)', f.properties.n_nascentes)}`,
   legend:[['#6baed6','Bacia do Atibaia'],['#e08a4f','Bacia do Jaguari'],['#74b87a','Bacia do Camanducaia']]},
- {id:'zonas', tab:'mun', name:'Zonas urbana, de expansão e rural', fs:'Zoneamento de 2026', color:'#c98a1f', url:'data/zonas.geojson', pane:'zonas',
+ {id:'zonas', tabs:['mun'], name:'Zonas urbana, de expansão e rural', fs:'Zoneamento de 2026', color:'#c98a1f', url:'data/zonas.geojson', pane:'zonas',
   style:f=>({color:'#fff', weight:1, fillOpacity:.55, fillColor:{'Zona urbana':'#8c9199','Zona de expansão urbana':'#e0b04a','Zona rural':'#9bc46f'}[f.properties.zona]||'#999'}),
   popup:f=>`<h4>${esc(f.properties.zona)}</h4>${pp('Área', fmt(f.properties.area_km2,1)+' km²')}${pp('Do município', fmt(f.properties.pct,1)+' %')}`,
   legend:[['#8c9199','Zona urbana'],['#e0b04a','Zona de expansão urbana'],['#9bc46f','Zona rural']]},
- {id:'car', tab:'mun', name:'Imóveis rurais (CAR)', fs:'Cadastro Ambiental Rural, out/2026', color:'#8a6d3b', url:'data/car.geojson', pane:'car',
+ {id:'car', tabs:['mun'], name:'Imóveis rurais (CAR)', fs:'Cadastro Ambiental Rural, out/2026', color:'#8a6d3b', url:'data/car.geojson', pane:'car',
   style:()=>({color:'#8a6d3b', weight:.9, fillOpacity:.06, fillColor:'#8a6d3b'}),
   popup:f=>`<h4>Imóvel rural (CAR)</h4>${pp('Área', fmt(f.properties.area_ha,1)+' ha')}${pp('Bacia', esc(f.properties.bacia))}`,
   legend:[['#8a6d3b','Imóvel rural (CAR)','l']]},
- {id:'captacoes', tab:'mun', name:'Captações de água para abastecimento', fs:'SP Águas · foco imediato no Jaguari', color:'#0e1c4a', on:true, url:'data/captacoes.geojson', pane:'pts',
-  point:(f,ll)=>L.circleMarker(ll, {pane:'pts', radius:9, color:'#fff', weight:2.5, fillColor:'#0e1c4a', fillOpacity:1}),
-  popup:f=>{ const jag = /Jaguari/.test(f.properties.rio); return `<h4>Captação no ${esc(f.properties.rio)}</h4>${pp('Finalidade','Abastecimento público')}${pp('Situação', jag?'em operação':'<b>não está em operação</b>')}`; },
-  legend:[['#0e1c4a','Captação de abastecimento público','c']]},
- {id:'montante', tab:'mun', name:'Área a montante das captações', fs:'sempre prioritária', color:'#b4441f', url:'data/montante.geojson', pane:'contrib',
-  style:()=>({color:'#b4441f', weight:2, dashArray:'6 4', fillOpacity:.07, fillColor:'#b4441f'}),
-  popup:f=>`<h4>A montante da captação do Rio ${esc(f.properties.rio)}</h4>${pp('Área de contribuição', fmt(f.properties.area_km2,2)+' km²')}`,
-  legend:[['#b4441f','Área a montante da captação','l']]},
- {id:'outorgas', tab:'mun', tech:true, name:'Outorgas de captação e lançamento nos rios', fs:'ANA / SP Águas · 22 pontos', color:'#1d6fb8', url:'data/outorgas.geojson', pane:'pts',
+
+ /* ----- hidrografia: aparece nas três abas ----- */
+ {id:'cursos', tabs:TODAS, name:'Córregos e demais cursos d\'água', fs:'hidrografia mapeada', color:'#5aa0dc', onIn:['mun','nasc'], url:'data/drenagem.geojson', pane:'cursos',
+  style:()=>({color:'#5aa0dc', weight:1.2, interactive:false}), legend:[['#5aa0dc','Córregos e cursos d\'água','l']]},
+ {id:'rios', tabs:TODAS, name:'Rios principais', fs:'Jaguari · Camanducaia · Atibaia', color:'#0b5cab', onIn:TODAS, url:'data/rios_principais.geojson', pane:'cursos', special:'rios',
+  style:()=>({color:'#0b5cab', weight:3.6, opacity:.95, lineCap:'round'}),
+  popup:f=>`<h4>${esc(f.properties.nome)}</h4><p style="margin:0">Rio principal: a APP de 50 m de cada margem é a primeira prioridade de recomposição florestal.</p>`,
+  legend:[['#0b5cab','Rios principais (Jaguari, Camanducaia, Atibaia)','l']]},
+ {id:'captacoes', tabs:['mun','acoes'], name:'Captações de água para abastecimento', fs:'SP Águas · foco imediato no Jaguari', color:'#0e1c4a', onIn:['mun','acoes'], url:'data/captacoes.geojson', pane:'pts',
+  point:(f,ll)=>{ const jag = /Jaguari/.test(f.properties.rio);
+    return L.circleMarker(ll, {pane:'pts', radius:9, color:'#fff', weight:2.5, fillColor:jag?'#0e1c4a':'#7d8bb5', fillOpacity:1})
+      .bindTooltip(jag ? 'Captação do Jaguari (em operação)' : 'Captação do Camanducaia (ainda não opera)', {permanent:true, direction:'right', offset:[10,0], className:'captlbl'}); },
+  popup:f=>{ const jag = /Jaguari/.test(f.properties.rio); return `<h4>Captação no ${esc(f.properties.rio)}</h4>${pp('Finalidade','Abastecimento público')}${pp('Situação', jag?'<b>em operação</b>':'<b>ainda não está em operação</b>')}`; },
+  legend:[['#0e1c4a','Captação em operação (Jaguari)','c'],['#7d8bb5','Captação ainda não ativa (Camanducaia)','c']]},
+ {id:'montante', tabs:['mun','acoes'], name:'Zona a montante das captações (prioridade)', fs:'sobe a prioridade · não é tudo "a recompor"', color:'#b4441f', onIn:['mun','acoes'], url:'data/montante.geojson', pane:'terra',
+  style:()=>({color:'#8a1c05', weight:3, dashArray:'9 6', fillOpacity:0}),
+  popup:f=>`<h4>A montante da captação do Rio ${esc(f.properties.rio)}</h4>${pp('Área de contribuição', fmt(f.properties.area_km2,2)+' km²')}<p style="margin:6px 0 0;font-size:11.5px">Toda a água desta área chega à captação. Por isso, aqui as APPs e as áreas de maior vulnerabilidade têm prioridade máxima. Isso <b>não</b> significa plantar floresta em toda a área.</p>`,
+  legend:[['#b4441f','Zona a montante da captação (prioridade)','l']]},
+ {id:'outorgas', tabs:['mun'], tech:true, name:'Outorgas de captação e lançamento nos rios', fs:'ANA / SP Águas · 22 pontos', color:'#1d6fb8', url:'data/outorgas.geojson', pane:'pts',
   point:(f,ll)=>L.circleMarker(ll, {pane:'pts', radius:5.5, color:'#fff', weight:1.4, fillColor:f.properties.tipo==='Captação'?'#1d6fb8':'#b4441f', fillOpacity:1}),
   popup:f=>`<h4>${esc(f.properties.tipo)} · ${esc(f.properties.rio)}</h4>${pp('Finalidade', esc(f.properties.finalidade))}${pp('Vazão (m³/h)', esc(f.properties.vazao_m3h||'–'))}${pp('Órgão', esc(f.properties.orgao))}`,
   legend:[['#1d6fb8','Captação superficial','c'],['#b4441f','Lançamento','c']]},
- {id:'pocos', tab:'mun', tech:true, name:'Poços (captação subterrânea)', fs:'SP Águas/DAEE · 78 poços', color:'#6b767c', url:'data/pocos.geojson', pane:'pts',
+ {id:'pocos', tabs:['mun'], tech:true, name:'Poços (captação subterrânea)', fs:'SP Águas/DAEE · 78 poços', color:'#6b767c', url:'data/pocos.geojson', pane:'pts',
   point:(f,ll)=>L.circleMarker(ll, {pane:'pts', radius:3.5, color:'#fff', weight:1, fillColor:'#6b767c', fillOpacity:.95}),
   popup:f=>`<h4>Poço</h4>${pp('Finalidade', esc(f.properties.finalidade))}${pp('Vazão média', esc(f.properties.vazao_media||'–'))}`,
   legend:[['#6b767c','Poço cadastrado','c']]},
 
- {id:'cursos', tab:'nasc', name:'Rios e córregos', fs:'cursos d\'água mapeados', color:'#1d6fb8', on:true, url:'data/cursos.geojson', pane:'cursos',
-  style:()=>({color:'#2f80c9', weight:1.4, interactive:false}), legend:[['#2f80c9','Rios e córregos','l']]},
- {id:'app', tab:'nasc', name:'Áreas de proteção (APP) com e sem floresta', fs:'rios 50 m · afluentes 30 m · nascentes 50 m', color:'#2e7d32', on:true, url:'data/app.geojson', pane:'app',
-  style:f=>({stroke:false, fillOpacity:.65, fillColor:f.properties.cobertura==='Com floresta'?'#2e7d32':'#d9534f'}),
-  popup:f=>`<h4>${esc(f.properties.classe_area)}</h4>${pp('Situação', esc(f.properties.cobertura))}${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Prioridade', esc(f.properties.prioridade_classe))}`,
-  legend:[['#2e7d32','APP com floresta'],['#d9534f','APP sem floresta (a recompor)']]},
- {id:'nascentes', tab:'nasc', name:'Nascentes (cor = vulnerabilidade no local)', fs:'ANA BHO 2015 · 139 pontos', color:'#d73027', on:true, url:'data/nascentes.geojson', pane:'pts', special:'nascentes',
-  legend:[['#1a9850','Muito baixa','c'],['#91cf60','Baixa','c'],['#fee08b','Média','c'],['#fc8d59','Alta','c'],['#9aa0a6','Área urbanizada','c'],['#b4441f','Nascente prioritária (nº)','c']]},
+ /* ----- nascentes e áreas de proteção ----- */
+ {id:'app_com', tabs:['nasc'], name:'Área de proteção (APP) com floresta', fs:'rios 50 m · afluentes 30 m · nascentes 50 m', color:COR_APP_COM, onIn:['nasc'], url:'data/app.geojson', pane:'app',
+  filter:f=>f.properties.cobertura==='Com floresta',
+  style:()=>({stroke:false, fillOpacity:.6, fillColor:COR_APP_COM}),
+  popup:f=>`<h4>${esc(f.properties.classe_area)}</h4>${pp('Situação','com floresta')}${pp('Bacia', esc(f.properties.sub_bacia))}`,
+  legend:[[COR_APP_COM,'APP com floresta (já protegida)']]},
+ {id:'app_sem', tabs:['nasc'], name:'Área de proteção (APP) sem floresta: a reflorestar', fs:'é aqui que a recomposição florestal acontece', color:COR_APP_SEM, onIn:['nasc'], url:'data/app.geojson', pane:'app',
+  filter:f=>f.properties.cobertura!=='Com floresta',
+  style:()=>({stroke:false, fillOpacity:.7, fillColor:COR_APP_SEM}),
+  popup:f=>`<h4>${esc(f.properties.classe_area)}</h4>${pp('Situação','<b>sem floresta: a reflorestar</b>')}${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Prioridade', esc(f.properties.prioridade_classe))}`,
+  legend:[[COR_APP_SEM,'APP sem floresta: a reflorestar']]},
+ {id:'nascentes', tabs:['nasc'], name:'Nascentes (cor = vulnerabilidade)', fs:'ANA BHO 2015 · 139 pontos · as 5 prioritárias numeradas', color:'#6a3fb5', onIn:['nasc'], url:'data/nascentes.geojson', pane:'pts', special:'nascentes',
+  legendTitle:'Vulnerabilidade da nascente',
+  legend:[['#d9ccf2','Muito baixa','c'],['#b9a3e3','Baixa','c'],['#9575cd','Média','c'],['#6a3fb5','Alta','c'],[COR_PRIOR,'Muito alta: nascente prioritária (nº)','c'],['#9aa0a6','Área urbanizada','c']]},
 
- {id:'contrib', tab:'acoes', name:'Sub-bacias de contribuição (vulnerabilidade)', fs:'média do Mapa 5 · 354 áreas', color:'#fc8d59', on:true, url:'data/contribuicao.geojson', pane:'contrib',
-  style:f=>({color:'#fff', weight:.6, fillOpacity:.62, fillColor:COR_VULC[f.properties.vulnerabilidade_classe]||'#bdbdbd'}),
+ /* ----- prioridades e ações ----- */
+ {id:'contrib', tabs:['acoes'], name:'Sub-bacias de contribuição (vulnerabilidade)', fs:'média do Mapa 5 · 354 áreas', color:'#fc8d59', onIn:['acoes'], url:'data/contribuicao.geojson', pane:'contrib',
+  style:f=>({color:'#fff', weight:.6, fillOpacity:.55, fillColor:COR_VULC[f.properties.vulnerabilidade_classe]||'#bdbdbd'}),
   popup:f=>{ const p=f.properties; return `<h4>Sub-bacia de contribuição</h4>${pp('Bacia', esc(p.sub_bacia)+' · prioridade '+esc(p.prioridade_bacia))}${pp('Vulnerabilidade', esc(p.vulnerabilidade_classe||'Urbanizada'))}${p.ordem_na_bacia?pp('Ordem na bacia', p.ordem_na_bacia+'ª'):''}${p.a_montante_de?pp('A montante de', esc(p.a_montante_de)):''}${pp('Área', fmt(p.area_km2,2)+' km²')}`; },
   legend:[['#1a9850','Vulnerabilidade muito baixa'],['#91cf60','Baixa'],['#fee08b','Média'],['#fc8d59','Alta'],['#d73027','Muito alta'],['#bdbdbd','Urbanizada']]},
- {id:'a_recompor', tab:'acoes', name:'Áreas a recompor (floresta)', fs:'por tipo de área de proteção', color:'#7b3fa0', on:true, url:'data/a_recompor.geojson', pane:'recompor',
-  style:f=>({color:COR_REC[f.properties.classe]||'#555', weight:1, fillOpacity:.75, fillColor:COR_REC[f.properties.classe]||'#555'}),
+ {id:'a_recompor', tabs:['acoes'], name:'Áreas a recompor nas APPs', fs:'rios, afluentes, massas d\'água e nascentes · 4,7 km²', color:'#7b3fa0', onIn:['acoes'], url:'data/a_recompor.geojson', pane:'recompor',
+  filter:f=>f.properties.classe!=='A montante de captação',
+  style:f=>({color:COR_REC[f.properties.classe]||'#555', weight:1, fillOpacity:.8, fillColor:COR_REC[f.properties.classe]||'#555'}),
   popup:f=>`<h4>A recompor · ${esc(f.properties.classe)}</h4>${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Área', fmt(f.properties.area_km2,2)+' km²')}`,
-  legend:[['#1d6fb8','Rio principal'],['#2aa6a6','Afluentes'],['#7fb4e0','Massas d\'água'],['#7b3fa0','Nascentes'],['#b4441f','A montante da captação']]},
- {id:'terra', tab:'acoes', name:'Terraceamento e controle de erosão', fs:'0,44 km² · zona rural, vulnerabilidade alta', color:'#8c5a2b', on:true, url:'data/terraceamento.geojson', pane:'terra',
+  legend:[['#1d6fb8','Rio principal'],['#2aa6a6','Afluentes'],['#7fb4e0','Massas d\'água'],['#7b3fa0','Nascentes']]},
+ {id:'terra', tabs:['acoes'], name:'Terraceamento e controle de erosão', fs:'0,44 km² · zona rural, vulnerabilidade alta', color:'#8c5a2b', onIn:['acoes'], url:'data/terraceamento.geojson', pane:'terra',
   style:()=>({color:'#6b3f17', weight:1.2, fillOpacity:.85, fillColor:'#c98a4a'}),
   popup:()=>`<h4>Terraceamento, voçorocas e estradas rurais</h4><p style="margin:0">Área rural com vulnerabilidade Alta ou Muito Alta, uso agropecuário, fora de floresta e APP.</p>`,
   legend:[['#c98a4a','Terraceamento / controle de erosão']]},
- {id:'programa', tab:'acoes', name:'Reflorestamento do Programa Bacias', fs:'152,5 ha mapeados (inclui trechos fora do município)', color:'#1f7a44', on:true, url:'data/programa.geojson', pane:'prog',
+ {id:'programa', tabs:['acoes'], name:'Reflorestamento do Programa Bacias', fs:'152,5 ha mapeados (inclui trechos fora do município)', color:'#1f7a44', onIn:['acoes'], url:'data/programa.geojson', pane:'prog',
   style:()=>({color:'#0d3b1f', weight:1.2, fillOpacity:.8, fillColor:'#2fa05a'}),
   popup:f=>{ const p=f.properties; return `<h4>${esc(p.local)}</h4>${pp('Área mapeada (propriedade)', fmt(p.ha_total,1)+' ha')}${pp('Bacia', esc(p.sub_bacia))}`; },
   legend:[['#2fa05a','Reflorestamento já realizado']]},
- {id:'floresta', tab:'acoes', tech:true, name:'Floresta existente (Inventário Florestal 2020)', fs:'usada no cálculo da área a recompor', color:'#1f7a44', url:'data/floresta.geojson', pane:'app',
+ {id:'potencial', tabs:['acoes'], tech:true, name:'Potencial a montante da captação (teto máximo)', fs:'todo o terreno sem floresta · NÃO será todo plantado', color:'#b4441f', url:'data/a_recompor.geojson', pane:'recompor',
+  filter:f=>f.properties.classe==='A montante de captação' && f.properties.area_km2>0.1,
+  style:()=>({color:'#b4441f', weight:.8, dashArray:'3 3', fillOpacity:.16, fillColor:'#b4441f'}),
+  popup:f=>`<h4>Potencial a montante · ${esc(f.properties.sub_bacia)}</h4>${pp('Área', fmt(f.properties.area_km2,2)+' km²')}<p style="margin:6px 0 0;font-size:11.5px">É o teto: todo o terreno sem floresta da zona a montante (inclui lavouras, pastos e estradas). A área efetivamente recomposta será definida por propriedade.</p>`,
+  legend:[['#e9b9a5','Potencial máximo a montante (não é meta)']]},
+ {id:'floresta', tabs:['acoes'], tech:true, name:'Floresta existente (Inventário Florestal 2020)', fs:'usada no cálculo da área a recompor', color:'#1f7a44', url:'data/floresta.geojson', pane:'app',
   style:()=>({stroke:false, fillOpacity:.4, fillColor:'#1f7a44', interactive:false}), legend:[['#1f7a44','Floresta (Inventário 2020)']]}
 ];
 const camadas = {};   // id -> {def, layer, on}
@@ -441,8 +482,29 @@ DEFS.forEach(d => camadas[d.id] = {def:d, layer:null, on:false});
 let NASC = {}, nascData = null;
 function criaLayer(d, data){
   if (d.special === 'nascentes') return criaNascentes(data);
-  return L.geoJSON(data, {pane:d.pane, style:d.style, pointToLayer: d.point ? (f, ll) => d.point(f, ll) : undefined,
+  const geo = L.geoJSON(data, {pane:d.pane, style:d.style, filter:d.filter, pointToLayer: d.point ? (f, ll) => d.point(f, ll) : undefined,
     onEachFeature:(f, l) => { if (d.popup) l.bindPopup(() => d.popup(f), {maxWidth:300}); }});
+  if (d.special === 'rios') return criaRios(geo, data);
+  return geo;
+}
+/* nome de cada rio principal: escrito perto da respectiva captação (Jaguari e Camanducaia) ou no trecho mais longo (Atibaia) */
+function criaRios(geo, data){
+  const g = L.layerGroup([geo]);
+  getJSON('data/captacoes.geojson').then(cap => {
+    const alvo = {};
+    cap.features.forEach(f => { const m = /Rio (\w+)/.exec(f.properties.rio); if (m) alvo['Rio ' + m[1]] = f.geometry.coordinates; });
+    const melhor = {};
+    data.features.forEach(f => {
+      const nome = f.properties.nome, linhas = f.geometry.type === 'MultiLineString' ? f.geometry.coordinates : [f.geometry.coordinates];
+      linhas.forEach(l => l.forEach(pt => {
+        const t = alvo[nome], d = t ? Math.hypot(pt[0]-t[0] - 0.012, pt[1]-t[1] - 0.012) : 0;   // um pouco ao lado da captação
+        const ok = t ? d : -l.length;
+        if (!melhor[nome] || ok < melhor[nome].k) melhor[nome] = {k:ok, p:pt};
+      }));
+    });
+    Object.entries(melhor).forEach(([nome, o]) => g.addLayer(L.marker([o.p[1], o.p[0]], {pane:'pts', interactive:false, icon:L.divIcon({className:'', html:`<span class="riolbl">${nome}</span>`, iconSize:[0,0], iconAnchor:[-6,-8]})})));
+  }).catch(console.error);
+  return g;
 }
 function criaNascentes(data){
   const g = L.layerGroup();
@@ -452,26 +514,27 @@ function criaNascentes(data){
     const pri = p.prioritaria === 1;
     const m = pri
       ? L.marker(ll, {pane:'pts', icon:L.divIcon({className:'', html:`<div class="numlbl">${p.num}</div>`, iconSize:[24,24], iconAnchor:[12,12]})})
-      : L.circleMarker(ll, {pane:'pts', radius:5, color:'#fff', weight:1.2, fillColor:COR_VUL[p.vuln_ponto]||'#999', fillOpacity:1});
+      : L.circleMarker(ll, {pane:'pts', radius:5.5, color:'#fff', weight:1.3, fillColor:COR_NAS[p.vuln_ponto]||'#999', fillOpacity:1});
     m.bindPopup(() => popNasc(p), {maxWidth:300});
     NASC[p.num] = {m, p, ll}; g.addLayer(m);
   });
   return g;
 }
 function popNasc(p){
-  const tag = p.prioritaria === 1 ? '<span class="pill" style="background:#b4441f;margin-left:6px">PRIORITÁRIA</span>' : '';
-  return `<h4>Nascente nº ${p.num}${tag}</h4>${pp('Bacia', esc(p.sub_bacia))}${pp('Zona', esc(p.zona))}${pp('Vulnerabilidade no local', esc(p.vuln_ponto))}${pp('APP em Alta/Muito Alta', fmt(p.pct_alta_ma_50m,1)+' %')}${pp('Floresta na APP', fmt(p.app_floresta_pct,1)+' %')}${body.classList.contains('tech') ? pp('Código ANA', p.idponto_ana)+pp('Altitude', fmt(p.altitude_m,0)+' m') : ''}<div style="font-size:10.5px;color:#6b767c;margin-top:6px">Ponto de mapeamento ainda não verificado em campo.</div>`;
+  const tag = p.prioritaria === 1 ? '<span class="pill" style="background:#2a0f6b;margin-left:6px">MUITO ALTA · PRIORITÁRIA</span>' : '';
+  return `<h4>Nascente nº ${p.num}${tag}</h4>${pp('Bacia', esc(p.sub_bacia))}${pp('Zona', esc(p.zona))}${pp('Vulnerabilidade no local', esc(p.vuln_ponto))}${pp('APP em Alta/Muito Alta', fmt(p.pct_alta_ma_50m,1)+' %')}${pp('Floresta na APP', fmt(p.app_floresta_pct,1)+' %')}${body.classList.contains('tech') ? pp('Código ANA', p.idponto_ana)+pp('Altitude', fmt(p.altitude_m,0)+' m') : ''}<div style="font-size:10.5px;color:#6b767c;margin-top:6px">${p.prioritaria===1?'Prioritária: pelo menos 25% da APP em vulnerabilidade Alta ou Muito Alta. ':''}Ponto de mapeamento ainda não verificado em campo.</div>`;
 }
+
 async function liga(id, on){
   const c = camadas[id], d = c.def; c.on = on;
-  const row = document.querySelector(`.layer-row[data-id="${id}"]`);
-  if (row) { row.querySelector('input').checked = on; }
+  const rows = document.querySelectorAll(`.layer-row[data-id="${id}"]`);
+  rows.forEach(r => { r.querySelector('input').checked = on; });
   if (on){
     if (!c.layer){
-      if (row) row.classList.add('loading');
+      rows.forEach(r => r.classList.add('loading'));
       try { const data = await getJSON(d.url); c.layer = criaLayer(d, data); }
-      catch(e){ console.error(e); if (row) row.classList.remove('loading'); c.on = false; if (row) row.querySelector('input').checked = false; return; }
-      if (row) row.classList.remove('loading');
+      catch(e){ console.error(e); rows.forEach(r => { r.classList.remove('loading'); r.querySelector('input').checked = false; }); c.on = false; return; }
+      rows.forEach(r => r.classList.remove('loading'));
     }
     if (c.on) { c.layer.addTo(map); if (d.id === 'limite') c.layer.bringToBack(); }
   } else if (c.layer) map.removeLayer(c.layer);
@@ -481,7 +544,7 @@ async function liga(id, on){
 function desenhaLegenda(){
   let h = '', n = 0;
   DEFS.forEach(d => { const c = camadas[d.id]; if (!c.on || !d.legend) return; n++;
-    h += `<div class="lg-t">${esc(d.name)}</div>` + d.legend.map(([cor, txt, t]) => `<div class="li"><span class="sw ${t==='c'?'c':''}" style="background:${t==='l'?'transparent':cor};${t==='l'?`border:0;border-top:3px solid ${cor};height:0;margin-top:5px`:''}"></span>${esc(txt)}</div>`).join(''); });
+    h += `<div class="lg-t">${esc(d.legendTitle || d.name)}</div>` + d.legend.map(([cor, txt, t]) => `<div class="li"><span class="sw ${t==='c'?'c':''}" style="background:${t==='l'?'transparent':cor};${t==='l'?`border:0;border-top:3px solid ${cor};height:0;margin-top:5px`:''}"></span>${esc(txt)}</div>`).join(''); });
   $('#lgBody').innerHTML = h || '<div class="li">Nenhuma camada ativa</div>';
   $('#lgHead span').textContent = n ? n + ' camada' + (n>1?'s':'') : '–';
 }
@@ -496,11 +559,13 @@ let tabAtual = null;
 TABS.forEach(t => { const b = document.createElement('button'); b.className = 'tab'; b.dataset.id = t.id; b.innerHTML = `<svg viewBox="0 0 24 24">${t.ico}</svg>${t.label}`; b.onclick = () => abreAba(t.id); $('#tabs').appendChild(b); });
 DEFS.forEach(d => {
   if (d.hideRow) return;
-  const cont = $('#layers-' + d.tab); if (!cont) return;
-  const row = document.createElement('label'); row.className = 'layer-row' + (d.tech ? ' tech-only' : ''); row.dataset.id = d.id; row.style.setProperty('--c', d.color);
-  row.innerHTML = `<input type="checkbox"><div><div class="nm">${esc(d.name)}</div><div class="fs">${esc(d.fs||'')}</div></div>`;
-  row.querySelector('input').onchange = e => liga(d.id, e.target.checked);
-  cont.appendChild(row);
+  d.tabs.forEach(tab => {
+    const cont = $('#layers-' + tab); if (!cont) return;
+    const row = document.createElement('label'); row.className = 'layer-row' + (d.tech ? ' tech-only' : ''); row.dataset.id = d.id; row.style.setProperty('--c', d.color);
+    row.innerHTML = `<input type="checkbox"><div><div class="nm">${esc(d.name)}</div><div class="fs">${esc(d.fs||'')}</div></div>`;
+    row.querySelector('input').onchange = e => liga(d.id, e.target.checked);
+    cont.appendChild(row);
+  });
 });
 function abreAba(id){
   tabAtual = id;
@@ -508,8 +573,9 @@ function abreAba(id){
   document.querySelectorAll('.pane').forEach(p => p.classList.toggle('active', p.id === 'pane-' + id));
   $('#tabBody').scrollTop = 0;
   DEFS.forEach(d => { if (d.always) return;
-    if (d.tab !== id) { if (camadas[d.id].on) liga(d.id, false); }
-    else if (d.on && !(d.tech && !body.classList.contains('tech'))) liga(d.id, true); });
+    if (!d.tabs.includes(id)) { if (camadas[d.id].on) liga(d.id, false); }
+    else if ((d.onIn || []).includes(id) && !(d.tech && !body.classList.contains('tech'))) liga(d.id, true);
+    else if (camadas[d.id].on && !(d.onIn || []).includes(id)) liga(d.id, false); });
 }
 liga('limite', true);
 
@@ -542,8 +608,8 @@ async function nascPronto(){
   $('#tPrior').querySelectorAll('tr.clk').forEach(tr => tr.onclick = () => vaiNasc(+tr.dataset.n));
   // barra por classe
   const ordem = ['Muito Baixa','Baixa','Média','Alta','Área Urbanizada e Construções']; const cont = {}; ps.forEach(p => cont[p.vuln_ponto] = (cont[p.vuln_ponto]||0) + 1);
-  $('#barVul').innerHTML = ordem.filter(k => cont[k]).map(k => `<span style="width:${cont[k]/ps.length*100}%;background:${COR_VUL[k]}" title="${k}: ${cont[k]}"></span>`).join('');
-  $('#keysVul').innerHTML = ordem.filter(k => cont[k]).map(k => `<span><i style="background:${COR_VUL[k]}"></i>${k.replace(' e Construções','')}: <b>${cont[k]}</b></span>`).join('');
+  $('#barVul').innerHTML = ordem.filter(k => cont[k]).map(k => `<span style="width:${cont[k]/ps.length*100}%;background:${COR_NAS[k]}" title="${k}: ${cont[k]}"></span>`).join('');
+  $('#keysVul').innerHTML = ordem.filter(k => cont[k]).map(k => `<span><i style="background:${COR_NAS[k]}"></i>${k.replace(' e Construções','')}: <b>${cont[k]}</b></span>`).join('');
   montaAnexo();
 }
 function vaiNasc(n){
