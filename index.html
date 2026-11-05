@@ -477,9 +477,9 @@ const DEFS = [
   style:()=>({color:'#6b3f17', weight:1.2, fillOpacity:.85, fillColor:'#c98a4a'}),
   popup:()=>`<h4>Terraceamento, voçorocas e estradas rurais</h4><p style="margin:0 0 6px">Área rural com vulnerabilidade alta ou muito alta, uso agropecuário, fora de floresta e APP.</p>${pp('Total no município','<b>0,44 km²</b>')}${pp('Jaguari / Camanducaia / Atibaia','0,35 / 0,08 / 0,01 km²')}`,
   legend:[['#c98a4a','Terraceamento / controle de erosão']]},
- {id:'programa', tabs:['acoes'], name:'Reflorestamento do Programa Bacias', fs:'152,5 ha mapeados (inclui trechos fora do município)', color:'#1f7a44', onIn:['acoes'], url:'data/programa.geojson', pane:'prog',
+ {id:'programa', tabs:['acoes'], name:'Reflorestamento do Programa Bacias', fs:'167,1 ha mapeados (inclui trechos fora do município)', color:'#1f7a44', onIn:['acoes'], url:'data/programa.geojson', pane:'prog',
   style:()=>({color:'#0d3b1f', weight:1.2, fillOpacity:.8, fillColor:'#2fa05a'}),
-  popup:f=>{ const p=f.properties; return `<h4>${esc(p.local)}</h4>${pp('Área mapeada (propriedade)', fmt(p.ha_total,1)+' ha')}${pp('Bacia', esc(p.sub_bacia))}<p style="margin:6px 0 0;font-size:11.5px">Programa Bacias: <b>152,5 ha reflorestados</b> em 8 propriedades (inclui trechos fora do município).</p>`; },
+  popup:f=>{ const p=f.properties; return `<h4>${esc(p.local)}</h4>${pp('Área mapeada (propriedade)', fmt(p.ha_total,1)+' ha')}${pp('Bacia', esc(p.sub_bacia))}<p style="margin:6px 0 0;font-size:11.5px">Programa Bacias: <b>167,1 ha reflorestados</b> em 8 propriedades (inclui trechos fora do município).</p>`; },
   legend:[['#2fa05a','Reflorestamento já realizado']]}
 ];
 const camadas = {};   // id -> {def, layer, on}
