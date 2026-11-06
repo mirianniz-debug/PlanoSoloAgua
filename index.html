@@ -213,6 +213,7 @@
         <p class="lead">Nascentes são o início dos córregos. Se o entorno perde a mata, a água chega mais suja e em menor quantidade. As áreas em <b style="color:#d97706">laranja</b> não têm floresta e <b>precisam ser reflorestadas</b>; as em <b style="color:#2e7d32">verde</b> já estão protegidas. Os pontos <b style="color:#6a3fb5">roxos</b> são as nascentes: quanto mais escuro, maior a vulnerabilidade, e as <b>5 numeradas</b> são as mais urgentes.</p>
         <div class="note"><b>Atenção:</b> os pontos vêm de mapeamento por imagens e ainda <b>não foram verificados em campo</b>.</div>
         <p class="txt"><b>Apoio à verificação de campo:</b> ligue a camada <b style="color:#00838f">Nascentes declaradas no CAR</b> para ver as nascentes informadas pelos proprietários no Cadastro Ambiental Rural (SICAR, via DataGeo). Elas ajudam a localizar nascentes na zona rural e de expansão urbana, mas <b>não entram na contagem nem nos cálculos do Plano</b>, que usam as 139 nascentes da ANA.</p>
+        <p class="txt"><b>Solos com saturação hídrica:</b> ligue a camada <b style="color:#1f78b4">Solos com saturação hídrica (campo úmido)</b> para ver as áreas de solo encharcado do kit do PDRF-PCJ, que devem ser conservadas e protegidas. Os limites são de escala regional e serão confirmados em campo.</p>
 
         <h3>Camadas</h3>
         <div id="layers-nasc"></div>
@@ -242,6 +243,7 @@
       <section class="pane" id="pane-acoes">
         <h2>Prioridades e ações</h2>
         <p class="lead">Onde agir primeiro: em <b>destaque</b>, as sub-bacias de vulnerabilidade alta e muito alta. Por cima, as APPs a recompor, o terraceamento e o reflorestamento já feito. <b>Clique no mapa</b> para ver os números de cada área.</p>
+        <p class="txt"><b>Voçorocas:</b> ligue a camada <b style="color:#c62828">Voçorocas mapeadas</b> para ver os 12 pontos do levantamento do IPT (2012), numerados como no Anexo II do Plano. Servem de guia para o cadastro das propriedades e para a vistoria de campo.</p>
 
         <h3>Camadas</h3>
         <div id="layers-acoes"></div>
@@ -252,7 +254,7 @@
           <div class="it" style="--c:#c98a1f"><div class="yr">2022 em diante</div><div class="tx"><b>2ª fase:</b> a prefeitura passou a executar diretamente a restauração, a recuperação de nascentes e o cercamento de APP, e ampliou a atuação para novas áreas.</div></div>
           <div class="it" style="--c:#1f7a44"><div class="yr">2025 – 2026 · após o Plano de 2024</div><div class="tx"><b>19 biodigestores</b> para tratar esgoto doméstico no campo (2025); restauração do Sítio Vargem das Pedras (nov/2025); o projeto do <b>Haras Maripá</b> foi escolhido pela CETESB como referência estadual em restauração (2026).</div></div>
         </div>
-        <div class="src">Plano 2026, item 4.9. A retomada do PSA é uma possibilidade para as próximas etapas.</div>
+        <div class="src">Plano 2026, item 4.10. A retomada do PSA é uma possibilidade para as próximas etapas.</div>
         <div class="tech-only">
         <h3>Como a prioridade é definida <span class="badge-tech">TÉCNICO</span></h3>
         <p class="txt"><b>1º nível – entre as bacias:</b> Jaguari (alta), Camanducaia (média) e Atibaia (baixa).<br>
@@ -444,6 +446,11 @@ const DEFS = [
   popup:f=>{ const p=f.properties; return `<h4>Nascente declarada no CAR</h4>${pp('Bacia', esc(p.sub_bacia))}${pp('Zona', esc(p.zona))}${pp('Nascente da ANA mais próxima', '≈ ' + fmt(p.dist_ana_m, 0) + ' m')}<div style="font-size:10.5px;color:#6b767c;margin-top:6px">Informada pelos proprietários no Cadastro Ambiental Rural (SICAR, via DataGeo/SP). Posição aproximada, para apoiar a vistoria de campo; deve ser validada pela Secretaria. Não entra na contagem das 139 nascentes do Plano.</div>`; },
   legendTitle:'Nascentes declaradas no CAR (apoio)',
   legend:[['#00838f','Declarada no CAR (a verificar em campo)','c']]},
+ /* solos com saturação hídrica (campo úmido): camada do kit do PDRF-PCJ (Plano de Bacias PCJ, 2017); medida de conservação do item 4.9 do Plano */
+ {id:'solos_sat', tabs:['nasc'], name:'Solos com saturação hídrica (campo úmido)', fs:'kit do PDRF-PCJ · 17 áreas · 4,26 km²', color:'#1f78b4', url:'data/solos_saturados.geojson', pane:'terra',
+  style:()=>({color:'#1f78b4', weight:1.2, fillOpacity:.5, fillColor:'#a6cee3'}),
+  popup:f=>{ const p=f.properties; return `<h4>Solo com saturação hídrica</h4>${pp('Bacia', esc(p.sub_bacia))}${pp('Zona predominante', esc(p.zona))}${pp('Área', fmt(p.area_km2, 2) + ' km²')}${pp('Nascentes da ANA dentro', p.nascentes_ana)}<div style="font-size:10.5px;color:#6b767c;margin-top:6px">Classe "campo úmido" do Plano de Bacias PCJ (2017), em escala regional: os limites devem ser confirmados em campo. Esses solos devem ser conservados e protegidos (item 4.9 do Plano).</div>`; },
+  legend:[['#a6cee3','Solo com saturação hídrica (campo úmido)']]},
  {id:'prior_jag', grupo:'Áreas de maior prioridade (vulnerabilidade alta e muito alta)', tabs:['acoes'], name:'Bacia do Jaguari', fs:'', color:'#c62828', onIn:['acoes'], url:'data/contribuicao.geojson', pane:'contrib',
   filter:f=>f.properties.sub_bacia==='Jaguari' && ['Alta','Muito alta'].includes(f.properties.vulnerabilidade_classe),
   style:f=>({color:'#1b1b1b', weight:1.6, fillOpacity:.85, fillColor:corVul(f.properties)}),
@@ -480,6 +487,11 @@ const DEFS = [
   style:()=>({color:COR_REC['Nascentes'], weight:1, fillOpacity:.85, fillColor:COR_REC['Nascentes']}),
   popup:f=>`<h4>A recompor · ${esc(f.properties.classe)}</h4>${pp('Bacia', esc(f.properties.sub_bacia))}${pp('Área', fmt(f.properties.area_km2,2)+' km²')}<p style="margin:6px 0 0;font-size:11.5px">Somando todas as APPs a recompor, são cerca de <b>353 mil mudas</b> (3 m × 2 m).</p>`,
   legend:[[COR_REC['Nascentes'],'APP das nascentes']]},
+ /* voçorocas do kit do PDRF-PCJ (IPT, 2012): numeração do Anexo II do Plano */
+ {id:'vocorocas', tabs:['acoes'], name:'Voçorocas mapeadas (IPT, 2012)', fs:'12 pontos · nº do Anexo II do Plano', color:'#c62828', url:'data/vocorocas.geojson', pane:'pts',
+  point:(f,ll)=>L.marker(ll, {pane:'pts', icon:L.divIcon({className:'', html:`<div class="numlbl" style="background:#c62828">${f.properties.num}</div>`, iconSize:[24,24], iconAnchor:[12,12]})}),
+  popup:f=>{ const p=f.properties; return `<h4>Voçoroca nº ${p.num}</h4>${pp('Bacia', esc(p.sub_bacia))}${pp('Zona', esc(p.zona))}${pp('Distância ao curso d’água', '≈ ' + fmt(p.dist_hidro_m, 0) + ' m')}${pp('Em imóvel do CAR', esc(p.imovel_car))}<div style="font-size:10.5px;color:#6b767c;margin-top:6px">Levantamento do IPT (2012), atualizado na 1ª etapa do PDRF-PCJ. Local a confirmar em campo. ${p.zona === 'Rural' ? 'Entra nas ações de controle da erosão do Plano (item 5.2).' : 'Fora da zona rural: apenas registrada e verificada em campo.'}</div>`; },
+  legend:[['#c62828','Voçoroca mapeada (nº do Anexo II)','c']]},
  {id:'terra', tabs:['acoes'], name:'Terraceamento e controle de erosão', fs:'0,44 km² · zona rural, vulnerabilidade alta', color:'#8c5a2b', onIn:['acoes'], url:'data/terraceamento.geojson', pane:'terra',
   style:()=>({color:'#6b3f17', weight:1.2, fillOpacity:.85, fillColor:'#c98a4a'}),
   popup:()=>`<h4>Terraceamento, voçorocas e estradas rurais</h4><p style="margin:0 0 6px">Área rural com vulnerabilidade alta ou muito alta, uso agropecuário, fora de floresta e APP.</p>${pp('Total no município','<b>0,44 km²</b>')}${pp('Jaguari / Camanducaia / Atibaia','0,35 / 0,08 / 0,01 km²')}`,
